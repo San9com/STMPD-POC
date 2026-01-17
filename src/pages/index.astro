@@ -10,20 +10,21 @@ import SiteFooter from "../components/SiteFooter.astro";
 // - Match the Figma desktop layout at max-width 1512px
 // - Reflow responsively below that (no full-page absolute positioning)
 
-const BASE_URL = import.meta.env.BASE_URL;
+const RAW_BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = RAW_BASE_URL.endsWith("/") ? RAW_BASE_URL : `${RAW_BASE_URL}/`;
 const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
 
 const studios = [
   {
     title: "Studio 1",
-    href: withBase("studio-1"),
+    href: withBase("studio-1/"),
     kind: "video",
     src: withBase("assets/IMG_7365.MOV"),
     poster: withBase("assets/Rectangle 9.png"),
   },
   {
     title: "Studio 2",
-    href: withBase("studio-2"),
+    href: withBase("studio-2/"),
     kind: "video",
     src: withBase("assets/IMG_7367.MOV"),
     poster: withBase("assets/Rectangle 9.png"),
@@ -31,14 +32,14 @@ const studios = [
   // Temporary repetition until we have real data for all studios
   {
     title: "Studio 1",
-    href: withBase("studio-1"),
+    href: withBase("studio-1/"),
     kind: "video",
     src: withBase("assets/IMG_7364.MOV"),
     poster: withBase("assets/Rectangle 9.png"),
   },
   {
     title: "Studio 2",
-    href: withBase("studio-2"),
+    href: withBase("studio-2/"),
     kind: "video",
     src: withBase("assets/IMG_7367.MOV"),
     poster: withBase("assets/Rectangle 9.png"),
@@ -334,8 +335,14 @@ const videoType = (src) => {
       </div>
     </section>
 
-    <!-- We make it together + collage -->
-    <section class="mx-auto max-w-[1512px] px-6 pb-20 pt-6 lg:px-0 lg:pt-10" data-zoom-group="together" data-zoom-axis="y">
+    <!-- People (anchor target) -->
+    <section
+      id="people"
+      class="mx-auto max-w-[1512px] px-6 pb-20 pt-6 lg:px-0 lg:pt-10"
+      data-zoom-group="together"
+      data-zoom-axis="y"
+      aria-label="People"
+    >
       <div class="mx-auto max-w-[1512px] lg:px-[128px]">
         <div class="flex flex-col items-end">
           <h2 class="font-pastiche text-[clamp(56px,7vw,160px)] leading-[clamp(48px,5vw,114px)] text-ink">
@@ -385,6 +392,26 @@ const videoType = (src) => {
             />
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Machines (anchor target) -->
+    <section id="machines" class="mx-auto max-w-[1512px] px-6 py-24 lg:px-0 lg:py-32" aria-label="Machines">
+      <div class="mx-auto max-w-[1512px] lg:px-[128px]">
+        <h2 class="font-pastiche text-[clamp(56px,7vw,160px)] leading-[clamp(48px,5vw,114px)] text-ink">Machines</h2>
+        <p class="mt-8 max-w-[820px] font-mono text-[20px] font-medium leading-[23.8px] text-ink">
+          Coming soon.
+        </p>
+      </div>
+    </section>
+
+    <!-- Film (anchor target) -->
+    <section id="film" class="mx-auto max-w-[1512px] px-6 pb-24 lg:px-0 lg:pb-32" aria-label="Film">
+      <div class="mx-auto max-w-[1512px] lg:px-[128px]">
+        <h2 class="font-pastiche text-[clamp(56px,7vw,160px)] leading-[clamp(48px,5vw,114px)] text-ink">Film</h2>
+        <p class="mt-8 max-w-[820px] font-mono text-[20px] font-medium leading-[23.8px] text-ink">
+          Coming soon.
+        </p>
       </div>
     </section>
 
