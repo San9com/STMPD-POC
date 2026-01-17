@@ -401,7 +401,7 @@ body {
 }
 
 .ring-orbit {
-  background: url("/assets/dial-for-reedy-set-record.svg") center / contain no-repeat;
+  background: var(--dial-bg) center / contain no-repeat;
   position: relative;
   transform-origin: center;
   will-change: transform;

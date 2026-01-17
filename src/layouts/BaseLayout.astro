@@ -3,6 +3,17 @@ import "../styles/global.css";
 
 // Keep the browser tab title as a single word across the site.
 const SITE_TITLE = "STMPD";
+
+const BASE_URL = import.meta.env.BASE_URL;
+const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
+
+const DIAL_BG_URL = withBase("assets/dial-for-reedy-set-record.svg");
+const PASTICHE_WOFF_URL = withBase("fonts/PasticheGrotesqueTrial-Regular.woff");
+const FAVICON_URL = withBase("assets/stmpd-logo-white.svg");
+
+// Avoid nested `url(var(--...))` in CSS minifier by storing full tokens.
+const DIAL_BG = `url('${DIAL_BG_URL}')`;
+const PASTICHE_SRC = `url('${PASTICHE_WOFF_URL}') format("woff")`;
 ---
 
 <!doctype html>
@@ -11,7 +22,7 @@ const SITE_TITLE = "STMPD";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{SITE_TITLE}</title>
-    <link rel="icon" href="/assets/stmpd-logo-white.svg" type="image/svg+xml" />
+    <link rel="icon" href={FAVICON_URL} type="image/svg+xml" />
 
     <!-- Figma uses Chivo Mono. This is the closest production-safe source. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,10 +35,14 @@ const SITE_TITLE = "STMPD";
     <!-- Pastiche Grotesque Trial (Figma main display font)
          Drop the .woff files into /public/fonts (see public/fonts/README.md).
          Site will gracefully fall back if missing. -->
-    <style>
+    <style define:vars={{ DIAL_BG, PASTICHE_SRC }}>
+      :root {
+        --dial-bg: var(--DIAL_BG);
+      }
+
       @font-face {
         font-family: "Pastiche Grotesque Trial";
-        src: url("/fonts/PasticheGrotesqueTrial-Regular.woff") format("woff");
+        src: var(--PASTICHE_SRC);
         font-weight: 400;
         font-style: normal;
         font-display: swap;
@@ -44,9 +59,9 @@ const SITE_TITLE = "STMPD";
     </div>
 
     <!-- Global asset fallback for broken images/posters -->
-    <script is:inline>
+    <script is:inline define:vars={{ BASE_URL }}>
       (() => {
-        const FALLBACK_SRC = `/assets/${encodeURIComponent("hasn't loaded placeholder.png")}`;
+        const FALLBACK_SRC = `${BASE_URL}assets/${encodeURIComponent("hasn't loaded placeholder.png")}`;
 
         // `error` doesn't bubble for <img>, so we listen in capture phase.
         document.addEventListener(

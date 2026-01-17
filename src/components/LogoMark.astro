@@ -5,10 +5,12 @@
  */
 const { class: className = "", variant = "white", alt = "" } = Astro.props;
 const invert = variant === "black";
+const BASE_URL = import.meta.env.BASE_URL;
+const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
 ---
 
 <img
-  src="/assets/stmpd-logo-white.svg"
+  src={withBase("assets/stmpd-logo-white.svg")}
   alt={alt}
   class={className}
   loading="eager"

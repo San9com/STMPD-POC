@@ -10,35 +10,38 @@ import SiteFooter from "../components/SiteFooter.astro";
 // - Match the Figma desktop layout at max-width 1512px
 // - Reflow responsively below that (no full-page absolute positioning)
 
+const BASE_URL = import.meta.env.BASE_URL;
+const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
+
 const studios = [
   {
     title: "Studio 1",
-    href: "/studio-1",
+    href: withBase("studio-1"),
     kind: "video",
-    src: "/assets/IMG_7365.MOV",
-    poster: "/assets/Rectangle 9.png",
+    src: withBase("assets/IMG_7365.MOV"),
+    poster: withBase("assets/Rectangle 9.png"),
   },
   {
     title: "Studio 2",
-    href: "/studio-2",
+    href: withBase("studio-2"),
     kind: "video",
-    src: "/assets/IMG_7367.MOV",
-    poster: "/assets/Rectangle 9.png",
+    src: withBase("assets/IMG_7367.MOV"),
+    poster: withBase("assets/Rectangle 9.png"),
   },
   // Temporary repetition until we have real data for all studios
   {
     title: "Studio 1",
-    href: "/studio-1",
+    href: withBase("studio-1"),
     kind: "video",
-    src: "/assets/IMG_7364.MOV",
-    poster: "/assets/Rectangle 9.png",
+    src: withBase("assets/IMG_7364.MOV"),
+    poster: withBase("assets/Rectangle 9.png"),
   },
   {
     title: "Studio 2",
-    href: "/studio-2",
+    href: withBase("studio-2"),
     kind: "video",
-    src: "/assets/IMG_7367.MOV",
-    poster: "/assets/Rectangle 9.png",
+    src: withBase("assets/IMG_7367.MOV"),
+    poster: withBase("assets/Rectangle 9.png"),
   },
 ];
 
@@ -60,7 +63,7 @@ const videoType = (src) => {
     <section class="relative">
       <div class="h-[220px] overflow-hidden bg-neutral-200 sm:h-[260px] lg:h-[331px]">
         <img
-          src="/assets/Rectangle 9.png"
+          src={withBase("assets/Rectangle 9.png")}
           alt=""
           class="absolute inset-0 h-full w-full object-cover"
           loading="eager"
@@ -74,11 +77,11 @@ const videoType = (src) => {
           loop
           playsinline
           preload="metadata"
-          poster="/assets/Rectangle 9.png"
+          poster={withBase("assets/Rectangle 9.png")}
           data-video="hero"
           onerror="this.remove()"
         >
-          <source src="/assets/IMG_7367.MOV" type={videoType("/assets/IMG_7367.MOV")} />
+          <source src={withBase("assets/IMG_7367.MOV")} type={videoType(withBase("assets/IMG_7367.MOV"))} />
         </video>
       </div>
 
@@ -89,7 +92,7 @@ const videoType = (src) => {
             <button type="button" aria-label="Open menu" data-menu-open class="grid h-[44px] w-[44px] place-items-center">
               <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
             </button>
-            <a href="/" aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
+            <a href={BASE_URL} aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
               <LogoMark class="h-[58px] w-[51px]" alt="" />
             </a>
             <div class="h-[44px] w-[44px]" aria-hidden="true"></div>
@@ -109,7 +112,7 @@ const videoType = (src) => {
               <a href="#people" class="marker-hover marker-hover--invert absolute left-[228px] top-[22px] text-[16px] font-light leading-[19.04px]">PEOPLE</a>
               <a href="#studios" class="marker-hover marker-hover--invert absolute left-[666px] top-[22px] text-[16px] font-light leading-[19.04px]">STUDIOS</a>
               <a href="#contact" class="marker-hover marker-hover--invert absolute left-[885px] top-[22px] text-[16px] font-light leading-[19.04px]">CONTACT</a>
-              <a href="/" class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
+              <a href={BASE_URL} class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
                 <LogoMark class="h-[57px] w-[50px]" alt="" />
               </a>
             </nav>
@@ -147,7 +150,7 @@ const videoType = (src) => {
         <!-- Card 1 (433×230) -->
         <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
           <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
-            <img src="/assets/489833225_18358745860181286_4041526710478678309_n.jpg" alt="" class="h-full w-full object-cover" />
+            <img src={withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg")} alt="" class="h-full w-full object-cover" />
           </div>
           <div class="mt-[26px] flex items-center justify-between text-[20px] leading-[23.8px] text-ink">
             <span class="font-extralight">Studio</span>
@@ -159,7 +162,7 @@ const videoType = (src) => {
         <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
           <!-- Match the other cards by default; expand smoothly on hover only -->
           <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
-            <img src="/assets/Rectangle 9-1.png" alt="" class="h-full w-full object-cover" />
+            <img src={withBase("assets/Rectangle 9-1.png")} alt="" class="h-full w-full object-cover" />
           </div>
           <div class="mt-[26px] flex items-center justify-between text-ink">
             <span class="text-[18px] font-extralight leading-[21.42px] tracking-[0.72px]">filmmakers</span>
@@ -170,7 +173,7 @@ const videoType = (src) => {
         <!-- Card 3 -->
         <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
           <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
-            <img src="/assets/Rectangle 9-2.png" alt="" class="h-full w-full object-cover" />
+            <img src={withBase("assets/Rectangle 9-2.png")} alt="" class="h-full w-full object-cover" />
           </div>
           <div class="mt-[26px] flex items-center justify-between text-[20px] leading-[23.8px] text-ink">
             <span class="font-extralight">Established</span>
@@ -181,7 +184,7 @@ const videoType = (src) => {
         <!-- Card 4 -->
         <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
           <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
-            <img src="/assets/tech-studio1.jpg" alt="" class="h-full w-full object-cover" />
+            <img src={withBase("assets/tech-studio1.jpg")} alt="" class="h-full w-full object-cover" />
           </div>
           <div class="mt-[26px] flex items-center justify-between text-[20px] leading-[23.8px] text-ink">
             <span class="font-extralight">Studio</span>
@@ -255,8 +258,8 @@ const videoType = (src) => {
     <!-- Studios (Figma: 3 wide panels, center is taller) -->
     <section id="studios" class="mx-auto max-w-[1512px] px-6 pb-10 lg:px-0 lg:pb-16" aria-label="Studios">
       <div class="flex items-end justify-between lg:px-[113px]">
-        <h2 class="font-pastiche text-[clamp(44px,4vw,88px)] leading-[clamp(40px,3.6vw,80px)] tracking-[-1.76px]">
-          Studios
+        <h2 class="font-mono text-[clamp(20px,2.4vw,40px)] leading-[1.1] font-medium tracking-[0.36px] uppercase">
+          world class studios
         </h2>
       </div>
 
@@ -346,7 +349,7 @@ const videoType = (src) => {
         <div class="mt-10 grid gap-6 lg:mt-[97px] lg:grid-cols-[440px_771px] lg:gap-[74px]">
           <div class="grid gap-6 lg:gap-[46px]">
             <img
-              src="/assets/274082823_1471205146649880_25528948957257731_n.jpg"
+              src={withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg")}
               alt=""
               class="h-[671px] w-[440px] object-cover"
               loading="lazy"
@@ -354,7 +357,7 @@ const videoType = (src) => {
               data-zoom-item
             />
             <img
-              src="/assets/468588580_18342529579181286_562739424918443234_n.jpg"
+              src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
               alt=""
               class="h-[586px] w-[440px] object-cover"
               loading="lazy"
@@ -365,7 +368,7 @@ const videoType = (src) => {
 
           <div class="grid gap-6 lg:gap-[63px]">
             <img
-              src="/assets/489833225_18358745860181286_4041526710478678309_n.jpg"
+              src={withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg")}
               alt=""
               class="h-[543px] w-[771px] object-cover"
               loading="lazy"
@@ -373,7 +376,7 @@ const videoType = (src) => {
               data-zoom-item
             />
             <img
-              src="/assets/468588580_18342529579181286_562739424918443234_n.jpg"
+              src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
               alt=""
               class="h-[696px] w-[772px] object-cover"
               loading="lazy"

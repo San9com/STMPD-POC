@@ -9,8 +9,19 @@ import IconMenu from "./IconMenu.astro";
  * Behavior: open from any `[data-menu-open]` trigger; close on backdrop, close button,
  * ESC, and when clicking any menu link (prototype-like).
  */
-const isHome = Astro.url?.pathname === "/";
-const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
+const BASE_URL = import.meta.env.BASE_URL;
+const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
+const path = Astro.url?.pathname || "/";
+const isHome = path === BASE_URL || path === BASE_URL.replace(/\/$/, "") || path === "/";
+const sectionHref = (id) => (isHome ? `#${id}` : `${BASE_URL}#${id}`);
+
+const photos = {
+  studios: withBase("assets/Rectangle 9.png"),
+  people: withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg"),
+  machines: withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg"),
+  film: withBase("assets/Rectangle 9-2.png"),
+  contact: withBase("assets/home.png"),
+};
 ---
 
 <aside
@@ -45,7 +56,7 @@ const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
         >
           <IconMenu class="h-[14px] w-[46px]" color="currentColor" />
         </button>
-        <a href="/" aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
+        <a href={BASE_URL} aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
           <LogoMark class="h-[58px] w-[51px]" variant="black" alt="" />
         </a>
         <div class="h-[44px] w-[44px]" aria-hidden="true"></div>
@@ -63,7 +74,7 @@ const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
             <IconMenu class="h-[14px] w-[46px]" color="currentColor" />
           </button>
 
-          <a href="/" class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
+          <a href={BASE_URL} class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
             <LogoMark class="h-[57px] w-[50px]" variant="black" alt="" />
           </a>
         </div>
@@ -75,7 +86,7 @@ const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
       <div class="menu-hover-badge" aria-hidden="true">
         <img
           id="menuHoverPhoto"
-          src="/assets/Rectangle 9.png"
+          src={photos.studios}
           alt=""
           loading="eager"
           decoding="async"
@@ -129,7 +140,7 @@ const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
   </div>
 </aside>
 
-<script>
+<script is:inline define:vars={{ photoByType: photos }}>
   const overlay = document.querySelector("[data-menu-overlay]");
   const panel = document.querySelector("[data-menu-panel]");
   const openBtns = Array.from(document.querySelectorAll("[data-menu-open]"));
@@ -189,14 +200,6 @@ const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
   let curX = 0;
   let curY = 0;
   let hasPointer = false;
-
-  const photoByType = {
-    studios: "/assets/Rectangle 9.png",
-    people: "/assets/274082823_1471205146649880_25528948957257731_n.jpg",
-    machines: "/assets/489833225_18358745860181286_4041526710478678309_n.jpg",
-    film: "/assets/Rectangle 9-2.png",
-    contact: "/assets/home.png",
-  };
 
   function setVisible(on) {
     if (!hoverWrap) return;

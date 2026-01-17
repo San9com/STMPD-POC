@@ -6,14 +6,22 @@ import LogoMark from "./LogoMark.astro";
 import PillButton from "./PillButton.astro";
 import SiteFooter from "./SiteFooter.astro";
 
+const BASE_URL = import.meta.env.BASE_URL;
+const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
+const publicUrl = (p) => {
+  if (!p || typeof p !== "string") return p;
+  if (/^https?:\/\//.test(p)) return p;
+  return withBase(p);
+};
+
 const {
   studioTitle = "Studio",
-  heroPoster = "/assets/Rectangle 9.png",
+  heroPoster = withBase("assets/Rectangle 9.png"),
   heroVideo,
   description = "",
-  featurePoster = "/assets/Rectangle 9.png",
+  featurePoster = withBase("assets/Rectangle 9.png"),
   featureVideo,
-  detailImage = "/assets/tech-studio1.jpg",
+  detailImage = withBase("assets/tech-studio1.jpg"),
   detailCopy = "Neve and Sony analog desks, a curated wall of outboard, and a mic locker ready for vocals, ADR, and everything in between.\nQuiet HVAC, tuned rooms, and proper isolation let you capture performances cleanly — even when it’s getting loud.",
   meters,
   specCards,
@@ -151,7 +159,7 @@ const marqueeItems = [
     <section class="relative">
       <div class="h-[517px] overflow-hidden bg-neutral-200">
         <img
-          src={heroPoster}
+          src={publicUrl(heroPoster)}
           alt=""
           class="absolute inset-0 h-full w-full object-cover"
           loading="eager"
@@ -166,11 +174,11 @@ const marqueeItems = [
             loop
             playsinline
             preload="metadata"
-            poster={heroPoster}
+            poster={publicUrl(heroPoster)}
             data-video="hero"
             onerror="this.remove()"
           >
-            <source src={heroVideo} type={videoType(heroVideo)} />
+            <source src={publicUrl(heroVideo)} type={videoType(heroVideo)} />
           </video>
         ) : null}
       </div>
@@ -182,7 +190,7 @@ const marqueeItems = [
             <button type="button" aria-label="Open menu" data-menu-open class="grid h-[44px] w-[44px] place-items-center">
               <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
             </button>
-            <a href="/" aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
+            <a href={BASE_URL} aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
               <LogoMark class="h-[58px] w-[51px]" alt="" />
             </a>
             <div class="h-[44px] w-[44px]" aria-hidden="true"></div>
@@ -193,10 +201,10 @@ const marqueeItems = [
               <button type="button" class="absolute left-[0px] top-[23px] h-[14px] w-[46px]" aria-label="Open menu" data-menu-open>
                 <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
               </button>
-              <a href="/#people" class="marker-hover marker-hover--invert absolute left-[228px] top-[22px] text-[16px] font-light leading-[19.04px]">PEOPLE</a>
-              <a href="/#studios" class="marker-hover marker-hover--invert absolute left-[666px] top-[22px] text-[16px] font-light leading-[19.04px]">STUDIOS</a>
-              <a href="/#contact" class="marker-hover marker-hover--invert absolute left-[885px] top-[22px] text-[16px] font-light leading-[19.04px]">CONTACT</a>
-              <a href="/" class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
+              <a href={`${BASE_URL}#people`} class="marker-hover marker-hover--invert absolute left-[228px] top-[22px] text-[16px] font-light leading-[19.04px]">PEOPLE</a>
+              <a href={`${BASE_URL}#studios`} class="marker-hover marker-hover--invert absolute left-[666px] top-[22px] text-[16px] font-light leading-[19.04px]">STUDIOS</a>
+              <a href={`${BASE_URL}#contact`} class="marker-hover marker-hover--invert absolute left-[885px] top-[22px] text-[16px] font-light leading-[19.04px]">CONTACT</a>
+              <a href={BASE_URL} class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
                 <LogoMark class="h-[57px] w-[50px]" alt="" />
               </a>
             </nav>
@@ -209,7 +217,7 @@ const marqueeItems = [
       <div class="mt-[36px] lg:px-[85px]">
         <!-- Top controls row -->
         <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <PillButton href="/" label="BACK TO HOME" class="w-[243px] justify-between" />
+          <PillButton href={BASE_URL} label="BACK TO HOME" class="w-[243px] justify-between" />
           <PillButton href="#specs" label="VIEW ALL SPECS" class="w-[249px] justify-between" />
         </div>
 
@@ -263,12 +271,12 @@ const marqueeItems = [
                 loop
                 playsinline
                 preload="metadata"
-                poster={featurePoster}
+                poster={publicUrl(featurePoster)}
               >
-                <source src={featureVideo} type={videoType(featureVideo)} />
+                <source src={publicUrl(featureVideo)} type={videoType(featureVideo)} />
               </video>
             ) : (
-              <img src={featurePoster} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+              <img src={publicUrl(featurePoster)} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
             )}
           </div>
         </div>
@@ -277,7 +285,7 @@ const marqueeItems = [
         <section class="mt-14">
           <div class="relative overflow-hidden bg-neutral-200">
             <div class="aspect-[1428/1071] w-full">
-              <img src={detailImage} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+              <img src={publicUrl(detailImage)} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
             </div>
             <div class="absolute left-0 top-0 h-full w-full p-6 lg:p-[436px_0_0_244px]">
               <div class="flex max-w-[816px] gap-[57px]">
