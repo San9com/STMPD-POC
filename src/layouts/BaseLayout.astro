@@ -1,0 +1,174 @@
+---
+import "../styles/global.css";
+
+// Keep the browser tab title as a single word across the site.
+const SITE_TITLE = "STMPD";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{SITE_TITLE}</title>
+    <link rel="icon" href="/assets/stmpd-logo-white.svg" type="image/svg+xml" />
+
+    <!-- Figma uses Chivo Mono. This is the closest production-safe source. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@200;300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Pastiche Grotesque Trial (Figma main display font)
+         Drop the .woff files into /public/fonts (see public/fonts/README.md).
+         Site will gracefully fall back if missing. -->
+    <style>
+      @font-face {
+        font-family: "Pastiche Grotesque Trial";
+        src: url("/fonts/PasticheGrotesqueTrial-Regular.woff") format("woff");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
+  </head>
+  <body class="font-mono">
+    <slot />
+
+    <!-- Curtains transition overlay (for in-page anchor navigation) -->
+    <div class="curtains" data-curtains data-state="open" aria-hidden="true">
+      <div class="curtains__panel curtains__panel--left"></div>
+      <div class="curtains__panel curtains__panel--right"></div>
+    </div>
+
+    <!-- Global asset fallback for broken images/posters -->
+    <script is:inline>
+      (() => {
+        const FALLBACK_SRC = `/assets/${encodeURIComponent("hasn't loaded placeholder.png")}`;
+
+        // `error` doesn't bubble for <img>, so we listen in capture phase.
+        document.addEventListener(
+          "error",
+          (e) => {
+            const img = e.target;
+            if (!(img instanceof HTMLImageElement)) return;
+            if (img.dataset.fallback === "off") return;
+            if (img.dataset.fallbackApplied === "true") return;
+
+            img.dataset.fallbackApplied = "true";
+            img.removeAttribute("srcset");
+            img.src = FALLBACK_SRC;
+          },
+          true
+        );
+
+        // Also guard <video poster="...">: if the poster can't load, swap it.
+        const posters = Array.from(document.querySelectorAll("video[poster]"));
+        for (const v of posters) {
+          const poster = v.getAttribute("poster");
+          if (!poster || poster === FALLBACK_SRC) continue;
+          const test = new Image();
+          test.onerror = () => v.setAttribute("poster", FALLBACK_SRC);
+          test.src = poster;
+        }
+      })();
+    </script>
+
+    <!-- Anchor navigation “curtains” transition -->
+    <script is:inline>
+      (() => {
+        const wrap = document.querySelector("[data-curtains]");
+        if (!wrap) return;
+
+        const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+        let running = false;
+
+        const DURATION_MS = 420;
+
+        function waitTransition(ms = DURATION_MS) {
+          if (prefersReducedMotion) return Promise.resolve();
+          return new Promise((resolve) => {
+            let done = false;
+            const t = window.setTimeout(() => {
+              if (done) return;
+              done = true;
+              resolve();
+            }, ms + 50);
+
+            const onEnd = (e) => {
+              if (done) return;
+              // Only resolve once; either panel ending is fine.
+              if (!(e.target instanceof HTMLElement)) return;
+              if (!e.target.classList.contains("curtains__panel")) return;
+              done = true;
+              clearTimeout(t);
+              wrap.removeEventListener("transitionend", onEnd, true);
+              resolve();
+            };
+
+            wrap.addEventListener("transitionend", onEnd, true);
+          });
+        }
+
+        async function setCurtains(state) {
+          wrap.setAttribute("data-state", state);
+          await waitTransition();
+        }
+
+        function scrollToHash(hash) {
+          const raw = (hash || "").replace(/^#/, "");
+          if (!raw) {
+            window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            // keep URL clean when "top"
+            history.pushState(null, "", window.location.pathname + window.location.search);
+            return;
+          }
+
+          const el = document.getElementById(raw);
+          if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
+          history.pushState(null, "", `#${raw}`);
+        }
+
+        async function runCurtainNav(hash) {
+          if (running) return;
+          running = true;
+
+          // Close any open menu instantly so it doesn't overlay the curtains.
+          document.documentElement.removeAttribute("data-menu-open");
+
+          await setCurtains("closed");
+          scrollToHash(hash);
+          // allow layout to settle before revealing
+          await new Promise((r) => setTimeout(r, 40));
+          await setCurtains("open");
+
+          running = false;
+        }
+
+        document.addEventListener(
+          "click",
+          (e) => {
+            if (e.defaultPrevented) return;
+            if (e.button !== 0) return;
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+            const a = e.target?.closest?.("a[href]");
+            if (!a) return;
+            if (a.hasAttribute("download")) return;
+            if (a.getAttribute("target") && a.getAttribute("target") !== "_self") return;
+
+            const href = a.getAttribute("href") || "";
+            if (!href.startsWith("#")) return;
+
+            e.preventDefault();
+            runCurtainNav(href);
+          },
+          true
+        );
+      })();
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,883 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MenuOverlay from "../components/MenuOverlay.astro";
+import IconMenu from "../components/IconMenu.astro";
+import PillButton from "../components/PillButton.astro";
+import LogoMark from "../components/LogoMark.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+// Goal:
+// - Match the Figma desktop layout at max-width 1512px
+// - Reflow responsively below that (no full-page absolute positioning)
+
+const studios = [
+  {
+    title: "Studio 1",
+    href: "/studio-1",
+    kind: "video",
+    src: "/assets/IMG_7365.MOV",
+    poster: "/assets/Rectangle 9.png",
+  },
+  {
+    title: "Studio 2",
+    href: "/studio-2",
+    kind: "video",
+    src: "/assets/IMG_7367.MOV",
+    poster: "/assets/Rectangle 9.png",
+  },
+  // Temporary repetition until we have real data for all studios
+  {
+    title: "Studio 1",
+    href: "/studio-1",
+    kind: "video",
+    src: "/assets/IMG_7364.MOV",
+    poster: "/assets/Rectangle 9.png",
+  },
+  {
+    title: "Studio 2",
+    href: "/studio-2",
+    kind: "video",
+    src: "/assets/IMG_7367.MOV",
+    poster: "/assets/Rectangle 9.png",
+  },
+];
+
+const videoType = (src) => {
+  if (!src || typeof src !== "string") return undefined;
+  const lower = src.toLowerCase();
+  if (lower.endsWith(".mp4")) return "video/mp4";
+  if (lower.endsWith(".webm")) return "video/webm";
+  // For MOV (and unknown containers), omit `type` so the browser can sniff.
+  return undefined;
+};
+---
+
+<BaseLayout>
+  <MenuOverlay />
+
+  <main class="bg-white text-ink">
+    <!-- HERO media -->
+    <section class="relative">
+      <div class="h-[220px] overflow-hidden bg-neutral-200 sm:h-[260px] lg:h-[331px]">
+        <img
+          src="/assets/Rectangle 9.png"
+          alt=""
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+          data-video-poster="hero"
+        />
+        <video
+          class="absolute inset-0 h-full w-full object-cover"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="/assets/Rectangle 9.png"
+          data-video="hero"
+          onerror="this.remove()"
+        >
+          <source src="/assets/IMG_7367.MOV" type={videoType("/assets/IMG_7367.MOV")} />
+        </video>
+      </div>
+
+      <!-- NAV: desktop matches Figma geometry, mobile uses a clean header -->
+      <div class="pointer-events-none absolute inset-x-0 top-0">
+        <div class="pointer-events-auto mx-auto max-w-[1512px] px-6 pt-6 lg:px-0 lg:pt-[57px]">
+          <div class="flex items-center justify-between text-white lg:hidden">
+            <button type="button" aria-label="Open menu" data-menu-open class="grid h-[44px] w-[44px] place-items-center">
+              <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
+            </button>
+            <a href="/" aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
+              <LogoMark class="h-[58px] w-[51px]" alt="" />
+            </a>
+            <div class="h-[44px] w-[44px]" aria-hidden="true"></div>
+          </div>
+
+          <header class="relative hidden h-[57px] w-[953px] lg:block" style="margin-left:261.535px;">
+            <nav class="relative h-full w-full text-white">
+              <!-- Figma layout: hamburger → PEOPLE → (logo mark) → STUDIOS → CONTACT -->
+              <button
+                type="button"
+                class="absolute left-[0px] top-[23px] h-[14px] w-[46px]"
+                aria-label="Open menu"
+                data-menu-open
+              >
+                <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
+              </button>
+              <a href="#people" class="marker-hover marker-hover--invert absolute left-[228px] top-[22px] text-[16px] font-light leading-[19.04px]">PEOPLE</a>
+              <a href="#studios" class="marker-hover marker-hover--invert absolute left-[666px] top-[22px] text-[16px] font-light leading-[19.04px]">STUDIOS</a>
+              <a href="#contact" class="marker-hover marker-hover--invert absolute left-[885px] top-[22px] text-[16px] font-light leading-[19.04px]">CONTACT</a>
+              <a href="/" class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
+                <LogoMark class="h-[57px] w-[50px]" alt="" />
+              </a>
+            </nav>
+          </header>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO typography -->
+    <section class="mx-auto max-w-[1512px] px-6 pb-10 pt-10 lg:px-0 lg:pb-16">
+      <div class="grid items-start gap-10 lg:grid-cols-[1fr_240px] lg:px-[113px]">
+        <!-- Force 3-line layout at desktop width (matches your Figma intent) -->
+        <h1 class="font-pastiche text-[clamp(64px,8vw,160px)] leading-[clamp(56px,6.5vw,104px)]">
+          <span class="lg:block">your creative</span>
+          <span class="lg:block">partner in</span>
+          <span class="lg:block">sound</span>
+        </h1>
+
+        <!-- Desktop: pin AMS BASED row to the bottom of the hero title block (align with “sound”) -->
+        <div class="flex flex-col text-black lg:min-h-[312px] lg:pt-[20px]">
+          <p class="text-[18px] leading-[21.42px] tracking-[0.36px]">
+            High-end music production, audio, and immersive sound.
+          </p>
+          <div class="mt-10 flex items-center justify-between lg:mt-auto">
+            <p class="text-[18px] leading-[21.42px] tracking-[0.36px]">AMS BASED</p>
+            <span class="h-[6px] w-[6px] bg-black"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED: responsive grid, exact card sizes at desktop -->
+    <section class="mx-auto max-w-[1512px] px-6 pb-16 lg:px-0">
+      <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 xl:gap-[0px]">
+        <!-- Card 1 (433×230) -->
+        <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
+          <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
+            <img src="/assets/489833225_18358745860181286_4041526710478678309_n.jpg" alt="" class="h-full w-full object-cover" />
+          </div>
+          <div class="mt-[26px] flex items-center justify-between text-[20px] leading-[23.8px] text-ink">
+            <span class="font-extralight">Studio</span>
+            <span class="font-medium">Session</span>
+          </div>
+        </article>
+
+        <!-- Card 2 (433×311) -->
+        <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
+          <!-- Match the other cards by default; expand smoothly on hover only -->
+          <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
+            <img src="/assets/Rectangle 9-1.png" alt="" class="h-full w-full object-cover" />
+          </div>
+          <div class="mt-[26px] flex items-center justify-between text-ink">
+            <span class="text-[18px] font-extralight leading-[21.42px] tracking-[0.72px]">filmmakers</span>
+            <span class="text-[18px] font-medium leading-[21.42px] tracking-[0.36px]">Joker</span>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
+          <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
+            <img src="/assets/Rectangle 9-2.png" alt="" class="h-full w-full object-cover" />
+          </div>
+          <div class="mt-[26px] flex items-center justify-between text-[20px] leading-[23.8px] text-ink">
+            <span class="font-extralight">Established</span>
+            <span class="font-medium">Tash Sultana</span>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="mx-auto w-full max-w-[433px] group" data-artist-card>
+          <div class="h-[230px] w-full overflow-hidden bg-neutral-200 transition-[height] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:h-[311px]">
+            <img src="/assets/tech-studio1.jpg" alt="" class="h-full w-full object-cover" />
+          </div>
+          <div class="mt-[26px] flex items-center justify-between text-[20px] leading-[23.8px] text-ink">
+            <span class="font-extralight">Studio</span>
+            <span class="font-medium">Control room</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Cursor-follow “play/mute” control (ties to hero video) -->
+      <div class="artist-cursor-badge" data-artist-cursor aria-hidden="true">
+        <button
+          type="button"
+          class="grid h-[69px] w-[93px] place-items-center bg-white font-mono text-[32px] font-medium leading-[32px] text-ink ring-1 ring-black/15"
+          data-video-toggle
+          tabindex="-1"
+          aria-label="Toggle video audio"
+        >
+          play
+        </button>
+      </div>
+    </section>
+
+    <!-- Ready, Set, Record. (circles rotate in different directions) -->
+    <section class="mx-auto max-w-[1512px] px-6 py-24 lg:px-0 lg:py-40" data-rings-section>
+      <div class="relative mx-auto h-[520px] w-full max-w-[1512px] lg:h-[520px]">
+        <!-- Circles are positioned to match Figma offsets (some overflow left/right) -->
+        <div class="pointer-events-none absolute inset-0 overflow-visible rings-safe-mask">
+          <!-- left circle (off-canvas) -->
+          <div class="absolute left-[-254px] top-[27px] h-[411px] w-[411px]">
+            <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="1">
+              <div class="ring-orbit ring-spin-a h-full w-full"></div>
+            </div>
+          </div>
+          <!-- mid-left circle -->
+          <div class="absolute left-[106px] top-[27px] h-[411px] w-[411px]">
+            <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="-1">
+              <div class="ring-orbit ring-spin-b h-full w-full"></div>
+            </div>
+          </div>
+          <!-- mid-right circle -->
+          <div class="absolute left-[975px] top-[0px] h-[466px] w-[466px]">
+            <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="1">
+              <div class="ring-orbit ring-spin-c h-full w-full"></div>
+            </div>
+          </div>
+          <!-- right circle (overflows) -->
+          <div class="absolute left-[1334px] top-[4px] h-[458px] w-[458px]">
+            <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="-1">
+              <div class="ring-orbit ring-spin-d h-full w-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copy -->
+        <div class="relative z-10 mx-auto flex h-full max-w-[1512px] flex-col items-center justify-center text-center">
+          <div class="rings-copy-shield">
+            <h2
+              class="font-pastiche font-medium text-[clamp(44px,5.5vw,88px)] leading-[clamp(40px,5vw,80px)] tracking-[-1.76px] text-ink"
+              aria-label="Ready Set Record"
+            >
+              Ready Set Record
+            </h2>
+            <p class="mt-6 max-w-[520px] text-[20px] font-medium leading-[23.8px] text-ink">
+              Every room has its own character — and its own story. Come find yours.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Studios (Figma: 3 wide panels, center is taller) -->
+    <section id="studios" class="mx-auto max-w-[1512px] px-6 pb-10 lg:px-0 lg:pb-16" aria-label="Studios">
+      <div class="flex items-end justify-between lg:px-[113px]">
+        <h2 class="font-pastiche text-[clamp(44px,4vw,88px)] leading-[clamp(40px,3.6vw,80px)] tracking-[-1.76px]">
+          Studios
+        </h2>
+      </div>
+
+      <div class="mt-6 lg:mt-[52px]">
+        <div class="relative -mx-6 lg:mx-0">
+          <!-- “Step” carousel (center big, sides smaller). No arrows, no hints. -->
+          <div class="pb-6" data-studios-carousel aria-label="Studios carousel" tabindex="0">
+            <div class="flex gap-[24px] lg:gap-[53px]" data-studios-track>
+              {studios.map((studio) => (
+                <article class="relative shrink-0" data-studio-card>
+                  <div data-studio-card-inner>
+                    <div class="w-[calc(100vw-3rem)] sm:w-[560px] lg:w-[1077px]">
+                      <div class="h-[380px] overflow-hidden bg-neutral-200 sm:h-[460px] lg:h-[537px]">
+                        <video
+                          class="h-full w-full object-cover"
+                          autoplay
+                          muted
+                          loop
+                          playsinline
+                          preload="metadata"
+                          poster={studio.poster}
+                        >
+                          <source src={studio.src} type={videoType(studio.src)} />
+                        </video>
+                      </div>
+
+                      <div class="mt-4 flex items-center justify-between gap-4 sm:mt-[18px]">
+                        <div class="font-pastiche text-[clamp(44px,5vw,88px)] leading-[clamp(40px,4.6vw,80px)] tracking-[-1.76px] text-ink">
+                          {studio.title}
+                        </div>
+                        <PillButton href={studio.href} label="Learn more" class="shrink-0" />
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Studio ribbons (Figma y≈4016; two stripes moving opposite directions) -->
+    <section aria-label="Studios ribbon" class="mx-auto max-w-[1512px] px-0 pb-12 lg:pb-16">
+      <div class="bg-ink py-[1px] text-white">
+        <div class="overflow-hidden">
+          <div class="ribbon-track ribbon-left">
+            <div class="flex gap-10 whitespace-nowrap px-6 py-[10px] text-[20px] font-medium leading-[23.8px]">
+              <span>STUDIO 1</span><span>STUDIO 2</span><span>STUDIO 3</span><span>STUDIO 4</span><span>STUDIO 5</span><span>STUDIO 6</span><span>STUDIO 7</span><span>MIX STUDIO</span>
+              <span>STUDIO 1</span><span>STUDIO 2</span><span>STUDIO 3</span><span>STUDIO 4</span><span>STUDIO 5</span><span>STUDIO 6</span><span>STUDIO 7</span><span>MIX STUDIO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-ink py-[1px] text-white">
+        <div class="overflow-hidden">
+          <div class="ribbon-track ribbon-right">
+            <div class="flex gap-10 whitespace-nowrap px-6 py-[10px] text-[20px] font-medium leading-[23.8px]">
+              <span>STUDIO 1</span><span>STUDIO 2</span><span>STUDIO 3</span><span>STUDIO 4</span><span>STUDIO 5</span><span>STUDIO 6</span><span>STUDIO 7</span><span>MIX STUDIO</span>
+              <span>STUDIO 1</span><span>STUDIO 2</span><span>STUDIO 3</span><span>STUDIO 4</span><span>STUDIO 5</span><span>STUDIO 6</span><span>STUDIO 7</span><span>MIX STUDIO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Discover all studios button (Figma: 317×49) -->
+    <section class="mx-auto max-w-[1512px] px-6 pb-24 lg:px-0 lg:pb-32">
+      <div class="flex justify-center">
+        <PillButton href="#studios" label="DISCOVER ALL STUDIOS" class="min-w-[317px] justify-between" />
+      </div>
+    </section>
+
+    <!-- We make it together + collage -->
+    <section class="mx-auto max-w-[1512px] px-6 pb-20 pt-6 lg:px-0 lg:pt-10" data-zoom-group="together" data-zoom-axis="y">
+      <div class="mx-auto max-w-[1512px] lg:px-[128px]">
+        <div class="flex flex-col items-end">
+          <h2 class="font-pastiche text-[clamp(56px,7vw,160px)] leading-[clamp(48px,5vw,114px)] text-ink">
+            We make it together
+          </h2>
+          <p class="mt-10 text-[20px] font-medium leading-[23.8px] text-ink">
+            Relaxed energy. Serious focus.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 lg:mt-[97px] lg:grid-cols-[440px_771px] lg:gap-[74px]">
+          <div class="grid gap-6 lg:gap-[46px]">
+            <img
+              src="/assets/274082823_1471205146649880_25528948957257731_n.jpg"
+              alt=""
+              class="h-[671px] w-[440px] object-cover"
+              loading="lazy"
+              decoding="async"
+              data-zoom-item
+            />
+            <img
+              src="/assets/468588580_18342529579181286_562739424918443234_n.jpg"
+              alt=""
+              class="h-[586px] w-[440px] object-cover"
+              loading="lazy"
+              decoding="async"
+              data-zoom-item
+            />
+          </div>
+
+          <div class="grid gap-6 lg:gap-[63px]">
+            <img
+              src="/assets/489833225_18358745860181286_4041526710478678309_n.jpg"
+              alt=""
+              class="h-[543px] w-[771px] object-cover"
+              loading="lazy"
+              decoding="async"
+              data-zoom-item
+            />
+            <img
+              src="/assets/468588580_18342529579181286_562739424918443234_n.jpg"
+              alt=""
+              class="h-[696px] w-[772px] object-cover"
+              loading="lazy"
+              decoding="async"
+              data-zoom-item
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <SiteFooter />
+  </main>
+
+  <script>
+    const toggleBtn = document.querySelector("[data-video-toggle]");
+    const videos = Array.from(document.querySelectorAll("video[data-video]"));
+
+    function anyUnmuted() {
+      return videos.some((v) => !v.muted);
+    }
+
+    function anyPaused() {
+      return videos.some((v) => v.paused);
+    }
+
+    function syncLabel() {
+      if (!toggleBtn) return;
+      // Figma shows either "Mute" or "play" depending on state.
+      if (anyPaused()) {
+        toggleBtn.textContent = "play";
+        return;
+      }
+      // Keep it short for the cursor badge.
+      toggleBtn.textContent = anyUnmuted() ? "mute" : "unmute";
+    }
+
+    toggleBtn?.addEventListener("click", async () => {
+      // If anything is paused, start playback on all.
+      if (anyPaused()) {
+        await Promise.allSettled(videos.map((v) => v.play()));
+        syncLabel();
+        return;
+      }
+
+      // Toggle muted on all.
+      const nextMuted = !videos.some((v) => v.muted);
+      videos.forEach((v) => (v.muted = nextMuted));
+      syncLabel();
+    });
+
+    videos.forEach((v) => {
+      v.addEventListener("play", syncLabel, { passive: true });
+      v.addEventListener("pause", syncLabel, { passive: true });
+      v.addEventListener("volumechange", syncLabel, { passive: true });
+
+      // Hide the poster image once the video is actually playing.
+      v.addEventListener(
+        "playing",
+        () => {
+          const poster = document.querySelector(`[data-video-poster="${v.dataset.video}"]`);
+          if (poster) poster.style.opacity = "0";
+        },
+        { passive: true }
+      );
+    });
+
+    syncLabel();
+
+    // Featured cards: clicking any artist pauses videos (badge becomes "play").
+    document.addEventListener(
+      "click",
+      (e) => {
+        const artist = e.target?.closest?.("[data-artist-card]");
+        if (!artist) return;
+        // Don't treat clicks on actual buttons/links as a “pause everything”.
+        if (e.target?.closest?.("a,button,[data-artist-cursor]")) return;
+
+        videos.forEach((v) => v.pause?.());
+        syncLabel();
+      },
+      { passive: true }
+    );
+
+    // Featured cards: show the play/mute control as a cursor badge (menu-like).
+    const artistCursor = document.querySelector("[data-artist-cursor]");
+    const prefersHover = window.matchMedia?.("(hover: hover)")?.matches ?? false;
+    const prefersFine = window.matchMedia?.("(pointer: fine)")?.matches ?? false;
+
+    if (artistCursor && prefersHover && prefersFine) {
+      let raf = 0;
+      let visible = false;
+      let targetX = 0;
+      let targetY = 0;
+      let curX = 0;
+      let curY = 0;
+
+      function setVisible(on) {
+        visible = !!on;
+        artistCursor.toggleAttribute("data-visible", visible);
+      }
+
+      function setPos(x, y) {
+        // offset so the badge isn't directly under the cursor
+        artistCursor.style.transform = `translate3d(${Math.round(x + 18)}px, ${Math.round(y + 10)}px, 0)`;
+      }
+
+      function tick() {
+        raf = 0;
+        if (!visible) return;
+        curX += (targetX - curX) * 0.18;
+        curY += (targetY - curY) * 0.18;
+        setPos(curX, curY);
+        raf = requestAnimationFrame(tick);
+      }
+
+      function start(e) {
+        if (!e) return;
+        targetX = e.clientX;
+        targetY = e.clientY;
+        curX = targetX;
+        curY = targetY;
+        setPos(curX, curY);
+        setVisible(true);
+        if (!raf) raf = requestAnimationFrame(tick);
+      }
+
+      function stop() {
+        setVisible(false);
+      }
+
+      document.addEventListener("pointerover", (e) => {
+        const card = e.target?.closest?.("[data-artist-card]");
+        if (!card) return;
+        start(e);
+      });
+
+      document.addEventListener("pointerout", (e) => {
+        const fromCard = e.target?.closest?.("[data-artist-card]");
+        if (!fromCard) return;
+        const toCard = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest("[data-artist-card]") : null;
+        if (toCard) return;
+        stop();
+      });
+
+      document.addEventListener(
+        "pointermove",
+        (e) => {
+          if (!visible) return;
+          targetX = e.clientX;
+          targetY = e.clientY;
+          if (!raf) raf = requestAnimationFrame(tick);
+        },
+        { passive: true }
+      );
+    }
+
+    // Studios carousel: drag moves, release snaps one “step” at a time (center big, sides smaller).
+    const carousel = document.querySelector("[data-studios-carousel]");
+    const track = document.querySelector("[data-studios-track]");
+    const slides = Array.from(document.querySelectorAll("[data-studio-card]"));
+
+    if (carousel && track && slides.length) {
+      // Default selection: Studio 2 (index 1) when available.
+      let index = slides.length > 1 ? 1 : 0;
+      let dragging = false;
+      let startX = 0;
+      let startTranslate = 0;
+      let curTranslate = 0;
+      let moved = false;
+      let preventClick = false;
+      const THRESHOLD = 6;
+
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+      function getTranslateX() {
+        const m = new DOMMatrix(getComputedStyle(track).transform);
+        return m.m41 || 0;
+      }
+
+      function setTranslateX(x, animate = true) {
+        track.style.transition = animate ? "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)" : "none";
+        track.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
+        curTranslate = x;
+      }
+
+      function centerTo(i, animate = true) {
+        index = clamp(i, 0, slides.length - 1);
+        const cRect = carousel.getBoundingClientRect();
+        const sRect = slides[index].getBoundingClientRect();
+        const carouselCenter = cRect.left + cRect.width / 2;
+        const slideCenter = sRect.left + sRect.width / 2;
+        const delta = carouselCenter - slideCenter;
+        const next = getTranslateX() + delta;
+        setTranslateX(next, animate);
+        updateSizes();
+      }
+
+      function nearestIndex() {
+        const cRect = carousel.getBoundingClientRect();
+        const carouselCenter = cRect.left + cRect.width / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        for (let i = 0; i < slides.length; i++) {
+          const r = slides[i].getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const d = Math.abs(cx - carouselCenter);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        }
+        return best;
+      }
+
+      function updateSizes() {
+        for (let i = 0; i < slides.length; i++) {
+          const dist = i - index;
+          let pos = "far";
+          if (dist === 0) pos = "active";
+          else if (dist === -1) pos = "prev";
+          else if (dist === 1) pos = "next";
+          slides[i].setAttribute("data-pos", pos);
+        }
+      }
+
+      // Initial center + sizing
+      requestAnimationFrame(() => centerTo(index, false));
+      window.addEventListener("resize", () => centerTo(index, false), { passive: true });
+
+      carousel.addEventListener(
+        "pointerdown",
+        (e) => {
+          if (e.button !== 0) return;
+          if (e.target?.closest?.("a,button")) return;
+          dragging = true;
+          moved = false;
+          startX = e.clientX;
+          startTranslate = getTranslateX();
+          track.style.transition = "none";
+          carousel.classList.add("studios-carousel--dragging");
+          try {
+            carousel.setPointerCapture(e.pointerId);
+          } catch {
+            // ignore
+          }
+        },
+        { passive: true }
+      );
+
+      carousel.addEventListener(
+        "pointermove",
+        (e) => {
+          if (!dragging) return;
+          const dx = e.clientX - startX;
+          if (!moved && Math.abs(dx) < THRESHOLD) return;
+          moved = true;
+          setTranslateX(startTranslate + dx, false);
+          e.preventDefault();
+        },
+        { passive: false }
+      );
+
+      function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        carousel.classList.remove("studios-carousel--dragging");
+        const next = nearestIndex();
+        centerTo(next, true);
+        preventClick = moved;
+        setTimeout(() => (preventClick = false), 0);
+      }
+
+      carousel.addEventListener("pointerup", endDrag, { passive: true });
+      carousel.addEventListener("pointercancel", endDrag, { passive: true });
+      carousel.addEventListener("mouseleave", endDrag, { passive: true });
+
+      // If we dragged, don't let the "Learn more" link fire on mouseup.
+      carousel.addEventListener(
+        "click",
+        (e) => {
+          if (!preventClick) return;
+          const a = e.target?.closest?.("a[href]");
+          if (!a) return;
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        true
+      );
+
+      // Keyboard step
+      carousel.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          centerTo(index - 1, true);
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          centerTo(index + 1, true);
+        }
+      });
+    }
+
+    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+
+    const clamp01 = (v) => Math.min(1, Math.max(0, v));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const smoothstep = (t) => t * t * (3 - 2 * t);
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    const easeInCubic = (t) => t * t * t;
+
+    function fancyScale(t) {
+      // Fluid “magazine” feel, but NEVER larger than default size.
+      // Tiny → 1.00 (no overshoot, no fade).
+      const min = 0.06;
+      const max = 1.0;
+      if (t <= 0) return min;
+      if (t >= 1) return max;
+      return lerp(min, max, easeOutCubic(t));
+    }
+
+    function applySequentialProgress(items, progress01) {
+      const n = items.length;
+      if (!n) return;
+      const seg = 1 / n;
+
+      for (let i = 0; i < n; i++) {
+        const el = items[i];
+        const local = clamp01((progress01 - i * seg) / seg);
+        const t = smoothstep(local);
+        const scale = fancyScale(t);
+        // Fluid dynamic: soft parallax, never exceeding scale(1)
+        const y = lerp(18, 0, t);
+        el.style.opacity = "1";
+        el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+      }
+    }
+
+    function setupVerticalGroup(groupEl) {
+      const items = Array.from(groupEl.querySelectorAll("[data-zoom-item]"));
+      let ranges = [];
+      const groupName = groupEl?.getAttribute?.("data-zoom-group") || "";
+
+      function computeRanges() {
+        const vh = window.innerHeight || 1;
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+
+        // Each item animates based on its own position in the document, so it
+        // won't “appear after you've already passed it”.
+        ranges = items.map((el) => {
+          const rect = el.getBoundingClientRect();
+          const docTop = rect.top + scrollY;
+          // Start earlier so the image begins “growing” before it enters the viewport.
+          // For "We make it together", start a bit later (closer to the viewport).
+          const START_VH = groupName === "together" ? 1.45 : 1.8;
+          const END_VH = groupName === "together" ? 0.5 : 0.6;
+          const start = docTop - vh * START_VH;
+          const end = docTop - vh * END_VH;
+          return { start, end: Math.max(end, start + 1) };
+        });
+      }
+
+      function update() {
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+
+        for (let i = 0; i < items.length; i++) {
+          const el = items[i];
+          const r = ranges[i];
+          if (!r) continue;
+          const local = clamp01((scrollY - r.start) / (r.end - r.start));
+          const t = smoothstep(local);
+          const scale = fancyScale(t);
+          const y = lerp(18, 0, t);
+          el.style.opacity = "1";
+          el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+        }
+      }
+
+      computeRanges();
+      update();
+      return { update, recompute: computeRanges };
+    }
+
+    function setupHorizontalGroup(scrollerEl) {
+      const items = Array.from(scrollerEl.querySelectorAll("[data-zoom-item]"));
+
+      function update() {
+        const max = scrollerEl.scrollWidth - scrollerEl.clientWidth;
+        const h = max > 0 ? clamp01(scrollerEl.scrollLeft / max) : 0;
+
+        // Make the first item animate in as the section comes into view,
+        // then horizontal scroll takes over to progress through items.
+        const rect = scrollerEl.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        const v = clamp01((vh * 0.9 - rect.top) / (vh * 0.6));
+        const seg = items.length ? 1 / items.length : 1;
+        const progress01 = clamp01(Math.max(h, v * seg));
+
+        applySequentialProgress(items, progress01);
+      }
+
+      let raf = 0;
+      scrollerEl.addEventListener(
+        "scroll",
+        () => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            update();
+          });
+        },
+        { passive: true }
+      );
+
+      update();
+      return update;
+    }
+
+    // Ready / Set / Record: scroll-driven rotation (rings only)
+    const ringScrollEls = Array.from(document.querySelectorAll("[data-ring-scroll]"));
+
+    // New behavior: inertial scroll-driven rotation that continues even when the section isn't in view.
+    // Much lower sensitivity, but accumulates across page scroll. Feels “physical”.
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let vel = 0;
+    let angle = 0;
+    let ringRaf = 0;
+
+    // “Way less per scroll”: deg per pixel of scroll delta.
+    const ROT_PER_PX = 0.12; // 360deg per ~3000px
+    const FRICTION = 0.86; // inertia decay
+    const SPRING = 0.18; // how quickly velocity responds
+
+    function onScrollForRings() {
+      const y = window.scrollY || window.pageYOffset || 0;
+      const dy = y - lastScrollY;
+      lastScrollY = y;
+      // add impulse (scaled down heavily)
+      vel += dy * ROT_PER_PX * SPRING;
+      if (!ringRaf) ringRaf = requestAnimationFrame(tickRings);
+    }
+
+    function tickRings() {
+      ringRaf = 0;
+      if (prefersReducedMotion || ringScrollEls.length === 0) return;
+
+      // integrate + decay
+      angle += vel;
+      vel *= FRICTION;
+
+      // apply
+      for (const el of ringScrollEls) {
+        const dir = Number(el.getAttribute("data-ring-dir") || "1") || 1;
+        el.style.setProperty("--scroll-rot", `${angle * dir}deg`);
+      }
+
+      // keep ticking while moving
+      if (Math.abs(vel) > 0.02) ringRaf = requestAnimationFrame(tickRings);
+    }
+
+    if (!prefersReducedMotion) {
+      const verticalGroups = Array.from(document.querySelectorAll('[data-zoom-group][data-zoom-axis="y"]')).map(setupVerticalGroup);
+      const horizontalUpdaters = Array.from(document.querySelectorAll('[data-zoom-group][data-zoom-axis="x"]')).map(setupHorizontalGroup);
+
+      let raf = 0;
+      const updateVertical = () => {
+        for (const g of verticalGroups) g.update();
+      };
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            updateVertical();
+          });
+        },
+        { passive: true }
+      );
+
+      window.addEventListener(
+        "resize",
+        () => {
+          for (const g of verticalGroups) g.recompute();
+          updateVertical();
+          for (const fn of horizontalUpdaters) fn();
+        },
+        { passive: true }
+      );
+
+      updateVertical();
+      for (const fn of horizontalUpdaters) fn();
+      // Start inertial scroll tracking for rings
+      window.addEventListener("scroll", onScrollForRings, { passive: true });
+      window.addEventListener("resize", () => (lastScrollY = window.scrollY || window.pageYOffset || 0), { passive: true });
+      // kick once so they're initialized
+      onScrollForRings();
+    } else {
+      document.querySelectorAll("[data-zoom-item]").forEach((el) => {
+        el.style.transform = "none";
+        el.style.opacity = "1";
+      });
+    }
+  </script>
+</BaseLayout>
+

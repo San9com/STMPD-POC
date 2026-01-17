@@ -1,0 +1,10 @@
+---
+const { class: className = "", color = "currentColor" } = Astro.props;
+---
+
+<!-- Prototype behavior: 2 bars that animate into an X when `html[data-menu-open]` is set -->
+<span class={"menu-icon " + className} aria-hidden="true" style={`--menu-icon-color:${color};`}>
+  <span class="menu-icon__bar menu-icon__bar--a"></span>
+  <span class="menu-icon__bar menu-icon__bar--b"></span>
+</span>
+

@@ -1,0 +1,344 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MenuOverlay from "./MenuOverlay.astro";
+import IconMenu from "./IconMenu.astro";
+import LogoMark from "./LogoMark.astro";
+import PillButton from "./PillButton.astro";
+import SiteFooter from "./SiteFooter.astro";
+
+const {
+  studioTitle = "Studio",
+  heroPoster = "/assets/Rectangle 9.png",
+  heroVideo,
+  description = "",
+  featurePoster = "/assets/Rectangle 9.png",
+  featureVideo,
+  detailImage = "/assets/tech-studio1.jpg",
+  detailCopy = "Neve and Sony analog desks, a curated wall of outboard, and a mic locker ready for vocals, ADR, and everything in between.\nQuiet HVAC, tuned rooms, and proper isolation let you capture performances cleanly — even when it’s getting loud.",
+  meters,
+  specCards,
+} = Astro.props;
+
+function videoType(src) {
+  if (!src || typeof src !== "string") return undefined;
+  const lower = src.toLowerCase();
+  if (lower.endsWith(".mp4")) return "video/mp4";
+  if (lower.endsWith(".webm")) return "video/webm";
+  // For MOV (and unknown containers), omit `type` so the browser can sniff.
+  return undefined;
+}
+
+function clamp01(n) {
+  const v = typeof n === "number" && Number.isFinite(n) ? n : 0;
+  return Math.max(0, Math.min(1, v));
+}
+
+const meterValues = {
+  Gear: clamp01(meters?.Gear ?? 0.7),
+  Pricing: clamp01(meters?.Pricing ?? 0.6),
+  Space: clamp01(meters?.Space ?? 0.65),
+  Access: clamp01(meters?.Access ?? 0.6),
+  Capacity: clamp01(meters?.Capacity ?? 0.7),
+  Utility: clamp01(meters?.Utility ?? 0.65),
+};
+
+const meterGroups = [
+  ["Gear", "Pricing", "Space"],
+  ["Access", "Capacity", "Utility"],
+];
+
+const fallbackSpecCards = [
+  {
+    title: "Dimensions",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Console",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Lunchboxes",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Lunchbox 1",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "AD/DA",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Monitoring",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "DAW",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Outboard",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Microphones",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Instruments",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "Lunchbox 3",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+  {
+    title: "DSP",
+    rows: [
+      { label: "Control Room", value: "45m2" },
+      { label: "ISO/ booth overdub", value: "25m2" },
+    ],
+  },
+];
+
+const resolvedSpecCards = Array.isArray(specCards) && specCards.length ? specCards : fallbackSpecCards;
+
+const marqueeItems = [
+  { kind: "outline", text: "24-32 bit" },
+  { kind: "split", a: "Lynx", b: "Specs" },
+  { kind: "outline", text: "DBX 160A" },
+];
+---
+
+<BaseLayout>
+  <MenuOverlay />
+
+  <main class="bg-white text-ink">
+    <!-- HERO media -->
+    <section class="relative">
+      <div class="h-[517px] overflow-hidden bg-neutral-200">
+        <img
+          src={heroPoster}
+          alt=""
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+          data-video-poster="hero"
+        />
+        {heroVideo ? (
+          <video
+            class="absolute inset-0 h-full w-full object-cover"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster={heroPoster}
+            data-video="hero"
+            onerror="this.remove()"
+          >
+            <source src={heroVideo} type={videoType(heroVideo)} />
+          </video>
+        ) : null}
+      </div>
+
+      <!-- NAV (matches studio Figma group geometry) -->
+      <div class="pointer-events-none absolute inset-x-0 top-0">
+        <div class="pointer-events-auto mx-auto max-w-[1512px] px-6 pt-6 lg:px-0 lg:pt-[57px]">
+          <div class="flex items-center justify-between text-white lg:hidden">
+            <button type="button" aria-label="Open menu" data-menu-open class="grid h-[44px] w-[44px] place-items-center">
+              <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
+            </button>
+            <a href="/" aria-label="STMPD" class="grid h-[58px] w-[51px] place-items-center">
+              <LogoMark class="h-[58px] w-[51px]" alt="" />
+            </a>
+            <div class="h-[44px] w-[44px]" aria-hidden="true"></div>
+          </div>
+
+          <header class="relative hidden h-[57px] w-[953px] lg:block" style="margin-left:261.535px;">
+            <nav class="relative h-full w-full text-white">
+              <button type="button" class="absolute left-[0px] top-[23px] h-[14px] w-[46px]" aria-label="Open menu" data-menu-open>
+                <IconMenu class="h-[14px] w-[46px]" color="#ffffff" />
+              </button>
+              <a href="/#people" class="marker-hover marker-hover--invert absolute left-[228px] top-[22px] text-[16px] font-light leading-[19.04px]">PEOPLE</a>
+              <a href="/#studios" class="marker-hover marker-hover--invert absolute left-[666px] top-[22px] text-[16px] font-light leading-[19.04px]">STUDIOS</a>
+              <a href="/#contact" class="marker-hover marker-hover--invert absolute left-[885px] top-[22px] text-[16px] font-light leading-[19.04px]">CONTACT</a>
+              <a href="/" class="absolute left-[470px] top-0 h-[57px] w-[50px]" aria-label="STMPD">
+                <LogoMark class="h-[57px] w-[50px]" alt="" />
+              </a>
+            </nav>
+          </header>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-[1512px] px-6 pb-16 lg:px-0">
+      <div class="mt-[36px] lg:px-[85px]">
+        <!-- Top controls row -->
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <PillButton href="/" label="BACK TO HOME" class="w-[243px] justify-between" />
+          <PillButton href="#specs" label="VIEW ALL SPECS" class="w-[249px] justify-between" />
+        </div>
+
+        <!-- Title aligned with meters (desktop) -->
+        <div class="mt-10 flex flex-col gap-10 lg:mt-12 lg:flex-row lg:items-start lg:justify-between">
+          <h1 class="font-pastiche text-[clamp(64px,8vw,160px)] leading-[clamp(56px,6.5vw,114px)] text-ink">
+            {studioTitle}
+          </h1>
+
+          <!-- Two 3-column “meters” with labels (Figma groups 74/75) -->
+          <div class="flex flex-wrap gap-8 lg:justify-end">
+            {meterGroups.map((labels) => (
+              <div class="flex flex-col items-stretch">
+                <div class="flex items-start justify-between gap-[47px]">
+                  {labels.map((label) => (
+                    <div class="relative h-[278px] w-[67px]">
+                      <div class="absolute left-0 top-0 h-[82px] w-[67px] border border-black"></div>
+                      <div class="absolute left-[25px] top-[22px] h-[256px] w-[19px] border border-black">
+                        <div
+                          class="absolute bottom-0 left-0 right-0 bg-black"
+                          style={`height:${Math.round(meterValues[label] * 100)}%;`}
+                          aria-hidden="true"
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div class="mt-6 flex items-center justify-between gap-[47px] font-mono text-[20px] font-medium leading-[23.8px] text-ink">
+                  {labels.map((l) => (
+                    <div class="w-[67px] text-center">{l}</div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {description ? (
+          <p class="mt-[109px] max-w-[1296px] whitespace-pre-line font-mono text-[20px] font-medium leading-[23.8px] text-ink">
+            {description}
+          </p>
+        ) : null}
+
+        <div class="mt-[59px] overflow-hidden bg-neutral-200">
+          <div class="h-[520px] sm:h-[680px] lg:h-[861px]">
+            {featureVideo ? (
+              <video
+                class="h-full w-full object-cover"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster={featurePoster}
+              >
+                <source src={featureVideo} type={videoType(featureVideo)} />
+              </video>
+            ) : (
+              <img src={featurePoster} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+            )}
+          </div>
+        </div>
+
+        <!-- Detail: wide image + copy overlay (moved from Home) -->
+        <section class="mt-14">
+          <div class="relative overflow-hidden bg-neutral-200">
+            <div class="aspect-[1428/1071] w-full">
+              <img src={detailImage} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+            </div>
+            <div class="absolute left-0 top-0 h-full w-full p-6 lg:p-[436px_0_0_244px]">
+              <div class="flex max-w-[816px] gap-[57px]">
+                <p class="w-[533px] whitespace-pre-line font-mono text-[20px] font-medium leading-[23.8px] text-white [text-shadow:0_1px_18px_rgba(0,0,0,0.45)]">
+                  {detailCopy}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Specs marquee: top rolls left, bottom rolls right -->
+        <section class="mt-[104px]" aria-label="Specs marquee">
+          {["left", "right"].map((dir) => (
+            <div class="specs-marquee-row border-y border-black/0 py-2">
+              <div class={`specs-marquee-track specs-marquee-track--${dir}`}>
+                <div class="flex w-max items-center gap-[56px] pr-[56px]">
+                  {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item) => (
+                    <div class="shrink-0 font-pastiche text-[clamp(72px,8vw,190px)] leading-[clamp(64px,6.2vw,132px)]">
+                      {item.kind === "split" ? (
+                        <span class="inline-flex items-baseline gap-[12px]">
+                          <span class="outline-ink">{item.a}</span>
+                          <span class="text-ink">{item.b}</span>
+                        </span>
+                      ) : (
+                        <span class="outline-ink">{item.text}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <!-- Specs grid (Figma groups 76–87) -->
+        <section id="specs" class="mt-[150px] pb-24" aria-label="Studio specs">
+          <div class="grid gap-x-[72px] gap-y-[92px] sm:grid-cols-2 lg:grid-cols-4">
+            {resolvedSpecCards.map((card) => (
+              <article class="min-w-0">
+                <h2 class="font-pastiche text-[40px] font-normal leading-[48px] text-ink">{card.title}</h2>
+                <div class="mt-9 space-y-4 font-mono text-[20px] leading-[23.8px]">
+                  {card.rows.map((r) =>
+                    r?.text ? (
+                      <div class="font-medium">{r.text}</div>
+                    ) : (
+                      <div class="flex items-baseline justify-between gap-4">
+                        <div class="font-medium">{r.label}</div>
+                        <div class="font-extralight">{r.value}</div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <SiteFooter />
+  </main>
+</BaseLayout>
+

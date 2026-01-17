@@ -1,0 +1,18 @@
+---
+/**
+ * STMPD mark SVG (provided by user in `public/assets/stmpd-logo-white.svg`).
+ * We only have a white-filled SVG, so for black-on-white contexts we invert it.
+ */
+const { class: className = "", variant = "white", alt = "" } = Astro.props;
+const invert = variant === "black";
+---
+
+<img
+  src="/assets/stmpd-logo-white.svg"
+  alt={alt}
+  class={className}
+  loading="eager"
+  decoding="async"
+  style={invert ? "filter: invert(1);" : ""}
+/>
+

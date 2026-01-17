@@ -1,0 +1,116 @@
+---
+import StudioDetailPage from "../components/StudioDetailPage.astro";
+
+const description =
+  "Designed with today’s production techniques in mind, Studio 2 seamlessly integrates the best of the digital and analogue world. Perfect acoustics, PMC MB3-XBD monitors, a Neve Genesys Black console, mastering grade Merging Horus converters, Pro Tools HDX, and serious high end outboard. Ideal for producing, recording, mixing, and anything else.\n\nWant to use your own DAW? Bring your laptop and simply hook up through our smart USB and HDMI link and get access to all console inputs and outputs while sitting comfortably at the console’s sweet spot.";
+
+const specCards = [
+  {
+    title: "Dimensions",
+    rows: [
+      { label: "Control room", value: "45m2" },
+      { label: "Iso booth/overdub room", value: "25m2" },
+    ],
+  },
+  {
+    title: "Console",
+    rows: [{ text: "Neve Genesys Black G32" }, { text: "VCA dynamics on all channels" }, { text: "88R and classic 1084 style EQs" }],
+  },
+  {
+    title: "AD/DA",
+    rows: [{ text: "Merging Horus (40x analog IO)" }, { text: "Neve Genesys via RME MadiFace Pro for laptops" }],
+  },
+  {
+    title: "DAW",
+    rows: [
+      { text: "Mac Pro 7.1 16 core 96gb ram" },
+      { text: "Pro Tools Ultimate HD" },
+      { text: "Logic Pro X" },
+      { text: "All UAD plug-ins" },
+      { text: "All Plugin-Alliance plug-ins" },
+      { text: "Many other plug-ins (contact us for full list)" },
+    ],
+  },
+  {
+    title: "DSP",
+    rows: [{ text: "Universal Audio Octo DSP card" }],
+  },
+  {
+    title: "Preamps",
+    rows: [{ text: "Neve 1073 console preamps (16x)" }, { text: "Merging Horus preamps (40x)" }, { text: "Additional preamps available (see lunchbox section)" }],
+  },
+  {
+    title: "Outboard",
+    rows: [
+      { text: "Thermionic Culture - The Phoenix mastering PLUS" },
+      { text: "Urei 1178" },
+      { text: "Chandler Limited TG-1" },
+      { text: "Tube-Tech CL-1B" },
+      { text: "Retro Instruments Sta-Level" },
+      { text: "PulTec EQM-1S3 (2x)" },
+      { text: "Eventide H3000D/SE" },
+      { text: "Eventide DSP4000" },
+      { text: "Lexicon 300L" },
+      { text: "Klark-Teknik DN780" },
+      { text: "Sony R7" },
+      { text: "Sony M7" },
+    ],
+  },
+  {
+    title: "Video",
+    rows: [{ text: 'Sony 55” 4K OLED display / Blackmagic Decklink Extreme 3D / SYNC HD' }],
+  },
+  {
+    title: "Microphones",
+    rows: [{ text: "Various industry standard mics available (contact us for the actual list)." }],
+  },
+  {
+    title: "Instruments",
+    rows: [{ text: "NI Kontrol S88" }, { text: "Lots of synths, guitars and amps available." }, { text: "Our instrument collection is constantly evolving." }, { text: "Please contact us for details." }],
+  },
+  {
+    title: "Tape",
+    rows: [{ text: "Studer A812 ¼ inch master recorder (on request)" }],
+  },
+  {
+    title: "Lunchbox 1 (on request)",
+    rows: [
+      { text: "Neve 1073 preamp" },
+      { text: "Neve 1073 equalizer" },
+      { text: "Neve 2264 compressor" },
+      { text: "Chandler Limited TG-2 500 preamp" },
+      { text: "Chandler Limited TG-Opto compressor" },
+    ],
+  },
+  {
+    title: "Lunchbox 2 (on request)",
+    rows: [
+      { text: "Shadow Hills Industries Mono-GAMA preamp" },
+      { text: "SSL 611 E-series equalizer" },
+      { text: "SSL 611 E-series compressor" },
+      { text: "API 512V mic preamp" },
+      { text: "API 527 compressor" },
+      { text: "Maag EQ4 equalizer with air band" },
+    ],
+  },
+];
+---
+
+<StudioDetailPage
+  studioTitle="Studio 2"
+  heroPoster="/assets/Rectangle 9.png"
+  heroVideo="/assets/IMG_7367.MOV"
+  description={`${description}\n`}
+  featurePoster="/assets/Rectangle 9.png"
+  featureVideo="/assets/IMG_7367.MOV"
+  specCards={specCards}
+  meters={{
+    Pricing: 0.62,
+    Gear: 0.7,
+    Space: 0.8,
+    Access: 0.74,
+    Capacity: 0.82,
+    Utility: 0.68,
+  }}
+/>
+

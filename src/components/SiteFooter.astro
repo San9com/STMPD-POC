@@ -1,0 +1,187 @@
+---
+import IconArrowMini from "./IconArrowMini.astro";
+
+const isHome = Astro.url?.pathname === "/";
+const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
+---
+
+<!-- Footer (match `public/assets/contact-menu-items-screenshot.png`) -->
+<footer class="bg-night text-white" id="contact">
+  <div class="mx-auto w-full max-w-[1024px] px-10 pb-[90px] pt-[110px]">
+    <!-- Top: headline + metronome -->
+    <div class="flex items-start justify-between gap-10">
+      <h2 class="font-pastiche text-[140px] leading-[112px] tracking-[-2px]">
+        <span class="block">Let’s</span>
+        <span class="block">sync</span>
+        <span class="block">our</span>
+        <span class="block">tempo</span>
+      </h2>
+
+      <img
+        src="/assets/metronome-footer.svg"
+        alt=""
+        class="mt-2 h-[430px] w-auto shrink-0 metronome-flip"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Contact row: mono, underlined email + phone -->
+    <div class="mt-10 grid grid-cols-[1fr_auto_1fr] items-start gap-8 font-mono text-[14px] leading-[16px]">
+      <div>
+        <div>H.J.E. Wenckebachweg 68</div>
+        <div class="mt-3">1114 AD Amsterdam</div>
+      </div>
+
+      <a href="mailto:contact@stmpdstudios.com" class="justify-self-center border-b border-white pb-[2px]">
+        contact@stmpdstudios.com
+      </a>
+
+      <a href="tel:+31206686161" class="justify-self-end border-b border-white pb-[2px]">+31(0)20 668 61 61</a>
+    </div>
+
+    <!-- Divider line -->
+    <div class="mt-14 border-t border-white/40"></div>
+
+    <!-- Bottom: menu + right image + back-to-top pill -->
+    <div class="mt-14 grid items-end gap-12 lg:grid-cols-[494.6px_1fr]">
+      <!-- Hover cursor photo (desktop only): same images as the menu overlay -->
+      <div class="footer-hover-badge" aria-hidden="true">
+        <img
+          id="footerHoverPhoto"
+          src="/assets/Rectangle 9.png"
+          alt=""
+          loading="eager"
+          decoding="async"
+          draggable="false"
+        />
+      </div>
+
+      <nav aria-label="Footer menu" class="w-full max-w-[494.6px]" data-footer-menu>
+        {[
+          { label: "Studios", href: sectionHref("studios"), type: "studios" },
+          { label: "People", href: sectionHref("people"), type: "people" },
+          { label: "Machines", href: sectionHref("machines"), type: "machines" },
+          { label: "Film", href: sectionHref("film"), type: "film" },
+          { label: "Contact", href: sectionHref("contact"), type: "contact" },
+        ].map((item) => (
+          <a
+            href={item.href}
+            data-footer-item={item.type}
+            class="block border-b border-white/40 py-3 font-pastiche text-[98.76px] font-medium leading-[78.83px] transition-colors hover:text-[#6746FF] focus-visible:text-[#6746FF]"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="justify-self-end">
+        <div class="h-[240px] w-[380.57px] overflow-hidden bg-white/5">
+          <img src="/assets/home.png" alt="" class="h-full w-full object-cover object-top" loading="lazy" decoding="async" />
+        </div>
+
+        <a
+          href="#"
+          class="mt-10 inline-flex h-[49px] w-[278px] items-center justify-between rounded-full border border-white bg-transparent px-6 font-mono text-[14px] font-medium leading-[16px] tracking-[0.28px] text-white"
+        >
+          <span>BACK TO THE TOP</span>
+          <span class="grid h-[30px] w-[30px] place-items-center">
+            <IconArrowMini class="h-[18px] w-[18px] -rotate-45" color="#ffffff" />
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Footer hover cursor badge: same images as the main menu overlay,
+  // but hover color is handled via link classes above (#6746FF).
+  const footerMenu = document.querySelector("[data-footer-menu]");
+  const footerBadge = document.querySelector(".footer-hover-badge");
+  const footerImg = document.getElementById("footerHoverPhoto");
+
+  const prefersHover = window.matchMedia?.("(hover: hover)")?.matches ?? false;
+  const prefersFine = window.matchMedia?.("(pointer: fine)")?.matches ?? false;
+
+  const photoByType = {
+    studios: "/assets/Rectangle 9.png",
+    people: "/assets/274082823_1471205146649880_25528948957257731_n.jpg",
+    machines: "/assets/489833225_18358745860181286_4041526710478678309_n.jpg",
+    film: "/assets/Rectangle 9-2.png",
+    contact: "/assets/home.png",
+  };
+
+  if (footerMenu && footerBadge && footerImg && prefersHover && prefersFine) {
+    let raf = 0;
+    let hasPointer = false;
+    let targetX = 0;
+    let targetY = 0;
+    let curX = 0;
+    let curY = 0;
+
+    function setVisible(on) {
+      footerBadge.toggleAttribute("data-visible", !!on);
+    }
+
+    function setPos(x, y) {
+      footerBadge.style.transform = `translate3d(${Math.round(x + 18)}px, ${Math.round(y + 10)}px, 0)`;
+    }
+
+    function setPhoto(type) {
+      const next = photoByType[type] || photoByType.studios;
+      if (footerImg.getAttribute("src") !== next) footerImg.setAttribute("src", next);
+    }
+
+    function tick() {
+      raf = 0;
+      if (!hasPointer) {
+        setVisible(false);
+        return;
+      }
+      curX += (targetX - curX) * 0.18;
+      curY += (targetY - curY) * 0.18;
+      setPos(curX, curY);
+      setVisible(true);
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start(e) {
+      hasPointer = true;
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!raf) {
+        curX = targetX;
+        curY = targetY;
+        raf = requestAnimationFrame(tick);
+      }
+    }
+
+    function stop() {
+      hasPointer = false;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      setVisible(false);
+    }
+
+    footerMenu.addEventListener("pointerover", (e) => {
+      const item = e.target?.closest?.("[data-footer-item]");
+      if (!item) return;
+      setPhoto(item.getAttribute("data-footer-item") || "studios");
+      start(e);
+    });
+
+    footerMenu.addEventListener("pointermove", (e) => {
+      if (!hasPointer) start(e);
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+
+    footerMenu.addEventListener("pointerout", (e) => {
+      const leaving = !e.relatedTarget || !footerMenu.contains(e.relatedTarget);
+      if (leaving) stop();
+    });
+  }
+</script>
+

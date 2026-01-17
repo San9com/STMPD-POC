@@ -1,0 +1,105 @@
+---
+import StudioDetailPage from "../components/StudioDetailPage.astro";
+
+const description =
+  "Due to its comfortable living room style layout and perfect acoustics, this room is great for writing, production, recording vocals and overdubs, or analog summing. A well maintained vintage Sony MXP3036 console and no less than 18 Universal Audio DSP cores provide you with both analogue and digital processing power.";
+
+const specCards = [
+  {
+    title: "Dimensions",
+    rows: [
+      { label: "Control room:", value: "45m2" },
+      { label: "Iso booth/overdub room:", value: "25m2" },
+    ],
+  },
+  {
+    title: "Console",
+    rows: [
+      {
+        text: "Sony MXP3036 (various EQ types installed: inductor, parametric, graphic, full parametric.)",
+      },
+      {
+        text: "Original designer specified modifications: faster op-amps, class A mix and monitor busses",
+      },
+    ],
+  },
+  {
+    title: "Lunchboxes",
+    rows: [{ text: "Additional 500 series “Lunch boxes” (available upon request)" }, { text: "LUNCHBOX 1" }, { text: "LUNCHBOX 2" }],
+  },
+  {
+    title: "Lunchbox 1",
+    rows: [
+      { text: "Neve 1073 preamp" },
+      { text: "Neve 1073 equalizer" },
+      { text: "Neve 2264 compressor" },
+      { text: "Chandler Limited TG-2 500 preamp" },
+      { text: "Chandler Limited TG-Opto compressor" },
+    ],
+  },
+  {
+    title: "AD/DA",
+    rows: [{ text: "Universal Audio Apollo 16 (2x)" }],
+  },
+  {
+    title: "DSP",
+    rows: [{ text: "Universal Audio Twin duo core" }, { text: "Universal Audio Satellite octo" }],
+  },
+  {
+    title: "Monitoring",
+    rows: [{ text: "Genelec 8351" }, { text: "Van Medevoort RD 6.5 custom three way main system" }, { text: "PSI 17/2" }, { text: "Auratones" }],
+  },
+  {
+    title: "DAW",
+    rows: [
+      { text: "Pro Tools (contact us for version)" },
+      { text: "ALL Universal Audio UAD plug-ins" },
+      { text: "Native Instruments Komplete Ultimate" },
+      { text: "Waves Gold Bundle" },
+      { text: "Various other plug-ins" },
+    ],
+  },
+  {
+    title: "Outboard",
+    rows: [{ text: "Eventide H3000D/SE" }, { text: "Lexicon MPX-1" }, { text: "Focusrite Compounder" }, { text: "DOD sonic projector" }],
+  },
+  {
+    title: "Lunchbox 2",
+    rows: [
+      { text: "Shadow Hills Industries Mono-GAMA preamp" },
+      { text: "SSL 611 E-series equalizer" },
+      { text: "SSL 611 E-series compressor" },
+      { text: "API 512V mic preamp" },
+      { text: "API 527 compressor" },
+      { text: "Maag EQ4 equalizer with air band" },
+    ],
+  },
+  {
+    title: "Microphones",
+    rows: [{ text: "Various mics available, please contact us for details." }],
+  },
+  {
+    title: "Instruments",
+    rows: [{ text: "Please contact us for details." }],
+  },
+];
+---
+
+<StudioDetailPage
+  studioTitle="Studio 1"
+  heroPoster="/assets/Rectangle 9.png"
+  heroVideo="/assets/IMG_7365.MOV"
+  description={`${description}\n`}
+  featurePoster="/assets/Rectangle 9.png"
+  featureVideo="/assets/IMG_7365.MOV"
+  specCards={specCards}
+  meters={{
+    Pricing: 0.88,
+    Gear: 0.92,
+    Space: 0.72,
+    Access: 0.78,
+    Capacity: 0.66,
+    Utility: 0.9,
+  }}
+/>
+

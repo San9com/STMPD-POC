@@ -1,0 +1,20 @@
+{
+  "source": "Figma MCP scan_nodes_by_types (PAGE 949:2 + frames 949:3 / 949:238)",
+  "homeFrames": ["949:3", "949:238"],
+  "notable": {
+    "menuHamburger": "949:38",
+    "headerCubeMark": "949:9",
+    "tempoMark": "949:198",
+    "backToTopArrow": "949:217",
+    "pillArrowExample": "949:70"
+  },
+  "vectors": [
+    { "id": "949:38", "name": "Vector", "note": "hamburger icon (~46×14)" },
+    { "id": "949:9", "name": "Subtract", "note": "cube-like mark (header/menu)" },
+    { "id": "949:198", "name": "Vector 52", "note": "large mark next to “Let’s sync our tempo”" },
+    { "id": "949:70", "name": "Vector 11", "note": "small arrow used in pill buttons" },
+    { "id": "949:217", "name": "Vector 11", "note": "small arrow used in BACK TO THE TOP pill" },
+    { "id": "949:222", "name": "Vector", "note": "small icon near Mute button (play/mute state)" }
+  ]
+}
+

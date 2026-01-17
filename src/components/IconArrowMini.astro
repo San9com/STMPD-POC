@@ -1,0 +1,27 @@
+---
+const { class: className = "", color = "#151515" } = Astro.props;
+---
+
+<!-- Small arrow used in pill buttons ("Learn more", "Back to…") -->
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <path
+    d="M5 12h12"
+    stroke={color}
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M13 6l6 6-6 6"
+    stroke={color}
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
+
