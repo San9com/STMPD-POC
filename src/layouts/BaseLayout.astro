@@ -13,10 +13,19 @@ const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
 const DIAL_BG_URL = withBase("assets/dial-for-reedy-set-record.svg");
 const PASTICHE_WOFF_URL = withBase("fonts/PasticheGrotesqueTrial-Regular.woff");
 const FAVICON_URL = withBase("assets/stmpd-logo-white.svg");
+const CRITICAL_CSS = `
+:root {
+  --dial-bg: url('${DIAL_BG_URL}');
+}
 
-// Avoid nested `url(var(--...))` in CSS minifier by storing full tokens.
-const DIAL_BG = `url('${DIAL_BG_URL}')`;
-const PASTICHE_SRC = `url('${PASTICHE_WOFF_URL}') format("woff")`;
+@font-face {
+  font-family: "Pastiche Grotesque Trial";
+  src: url('${PASTICHE_WOFF_URL}') format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+`;
 ---
 
 <!doctype html>
@@ -38,19 +47,8 @@ const PASTICHE_SRC = `url('${PASTICHE_WOFF_URL}') format("woff")`;
     <!-- Pastiche Grotesque Trial (Figma main display font)
          Drop the .woff files into /public/fonts (see public/fonts/README.md).
          Site will gracefully fall back if missing. -->
-    <style define:vars={{ DIAL_BG, PASTICHE_SRC }}>
-      :root {
-        --dial-bg: var(--DIAL_BG);
-      }
-
-      @font-face {
-        font-family: "Pastiche Grotesque Trial";
-        src: var(--PASTICHE_SRC);
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
-    </style>
+    <link rel="preload" as="font" href={PASTICHE_WOFF_URL} type="font/woff" crossorigin />
+    <style set:html={CRITICAL_CSS}></style>
   </head>
   <body class="font-mono">
     <slot />
