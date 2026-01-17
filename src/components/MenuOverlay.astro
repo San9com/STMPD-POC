@@ -19,6 +19,8 @@ const sectionHref = (id) => (isHome ? `#${id}` : `${BASE_URL}#${id}`);
 const photos = {
   studios: withBase("assets/Rectangle 9.png"),
   people: withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg"),
+  machines: withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg"),
+  film: withBase("assets/Rectangle 9-2.png"),
   contact: withBase("assets/home.png"),
 };
 ---
@@ -108,6 +110,22 @@ const photos = {
           data-menu-item="people"
           class="block font-pastiche text-[clamp(64px,10vw,188px)] leading-[clamp(64px,8vw,150px)] text-ink-2 transition-colors hover:text-[#CB530E] focus-visible:text-[#CB530E]"
           >People</a
+        >
+        <div class="h-px w-full bg-black"></div>
+
+        <a
+          href={sectionHref("machines")}
+          data-menu-item="machines"
+          class="block font-pastiche text-[clamp(64px,10vw,188px)] leading-[clamp(64px,8vw,150px)] text-ink-2 transition-colors hover:text-[#CB530E] focus-visible:text-[#CB530E]"
+          >Machines</a
+        >
+        <div class="h-px w-full bg-black"></div>
+
+        <a
+          href={sectionHref("film")}
+          data-menu-item="film"
+          class="block font-pastiche text-[clamp(64px,10vw,188px)] leading-[clamp(64px,8vw,150px)] text-ink-2 transition-colors hover:text-[#CB530E] focus-visible:text-[#CB530E]"
+          >Film</a
         >
         <div class="h-px w-full bg-black"></div>
 

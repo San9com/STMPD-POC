@@ -11,6 +11,8 @@ const sectionHref = (id) => (isHome ? `#${id}` : `${BASE_URL}#${id}`);
 const photos = {
   studios: withBase("assets/Rectangle 9.png"),
   people: withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg"),
+  machines: withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg"),
+  film: withBase("assets/Rectangle 9-2.png"),
   contact: withBase("assets/home.png"),
 };
 ---
@@ -71,6 +73,8 @@ const photos = {
         {[
           { label: "Studios", href: sectionHref("studios"), type: "studios" },
           { label: "People", href: sectionHref("people"), type: "people" },
+          { label: "Machines", href: sectionHref("machines"), type: "machines" },
+          { label: "Film", href: sectionHref("film"), type: "film" },
           { label: "Contact", href: sectionHref("contact"), type: "contact" },
         ].map((item) => (
           <a

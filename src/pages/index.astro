@@ -398,6 +398,10 @@ const videoType = (src) => {
     <SiteFooter />
   </main>
 
+  <!-- Keep anchor targets for menu items without rendering sections -->
+  <div id="machines" aria-hidden="true"></div>
+  <div id="film" aria-hidden="true"></div>
+
   <script>
     const toggleBtn = document.querySelector("[data-video-toggle]");
     const videos = Array.from(document.querySelectorAll("video[data-video]"));
