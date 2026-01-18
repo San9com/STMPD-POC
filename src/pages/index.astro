@@ -5,6 +5,7 @@ import IconMenu from "../components/IconMenu.astro";
 import PillButton from "../components/PillButton.astro";
 import LogoMark from "../components/LogoMark.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import fs from "node:fs/promises";
 
 // Goal:
 // - Match the Figma desktop layout at max-width 1512px
@@ -13,6 +14,11 @@ import SiteFooter from "../components/SiteFooter.astro";
 const RAW_BASE_URL = import.meta.env.BASE_URL;
 const BASE_URL = RAW_BASE_URL.endsWith("/") ? RAW_BASE_URL : `${RAW_BASE_URL}/`;
 const withBase = (p = "") => `${BASE_URL}${String(p).replace(/^\/+/, "")}`;
+
+const mixTitleSvg = await fs.readFile(new URL("../../public/assets/mix-title.svg", import.meta.url), "utf-8");
+const performTitleSvg = await fs.readFile(new URL("../../public/assets/perform-title.svg", import.meta.url), "utf-8");
+const loungeTitleSvg = await fs.readFile(new URL("../../public/assets/Lounge-title.svg", import.meta.url), "utf-8");
+const shareTitleSvg = await fs.readFile(new URL("../../public/assets/share-title.svg", import.meta.url), "utf-8");
 
 const studios = [
   {
@@ -132,10 +138,10 @@ const videoType = (src) => {
           <span class="lg:block">sound</span>
         </h1>
 
-        <!-- Desktop: pin AMS BASED row to the bottom of the hero title block (align with “sound”) -->
+        <!-- Upper right copy -->
         <div class="flex flex-col text-black lg:min-h-[312px] lg:pt-[20px]">
           <p class="text-[18px] leading-[21.42px] tracking-[0.36px]">
-            High-end music production, audio, and immersive sound.
+            <span class="text-[#CB530E]">STMPD STUDIOS</span> provides the most advanced music production, audio and immersive sound
           </p>
           <div class="mt-10 flex items-center justify-between lg:mt-auto">
             <p class="text-[18px] leading-[21.42px] tracking-[0.36px]">AMS BASED</p>
@@ -209,30 +215,18 @@ const videoType = (src) => {
     </section>
 
     <!-- Ready, Set, Record. (circles rotate in different directions) -->
-    <section class="mx-auto max-w-[1512px] px-6 py-24 lg:px-0 lg:py-40" data-rings-section>
+    <section class="mx-auto max-w-[1512px] px-6 pt-24 pb-12 lg:px-0 lg:pt-40 lg:pb-16" data-rings-section>
       <div class="relative mx-auto h-[520px] w-full max-w-[1512px] lg:h-[520px]">
         <!-- Circles are positioned to match Figma offsets (some overflow left/right) -->
-        <div class="pointer-events-none absolute inset-0 overflow-visible rings-safe-mask">
-          <!-- left circle (off-canvas) -->
-          <div class="absolute rings-left-safe top-[27px] h-[411px] w-[411px]">
+        <div class="pointer-events-none absolute inset-0 overflow-visible" data-rings-layout>
+          <!-- left dial -->
+          <div class="ring-dial ring-dial--left-outer">
             <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="1">
               <div class="ring-orbit ring-spin-a h-full w-full"></div>
             </div>
           </div>
-          <!-- mid-left circle -->
-          <div class="absolute left-[106px] top-[27px] h-[411px] w-[411px]">
-            <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="-1">
-              <div class="ring-orbit ring-spin-b h-full w-full"></div>
-            </div>
-          </div>
-          <!-- mid-right circle -->
-          <div class="absolute left-[975px] top-[0px] h-[466px] w-[466px]">
-            <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="1">
-              <div class="ring-orbit ring-spin-c h-full w-full"></div>
-            </div>
-          </div>
-          <!-- right circle (overflows) -->
-          <div class="absolute rings-right-safe top-[4px] h-[458px] w-[458px]">
+          <!-- right dial -->
+          <div class="ring-dial ring-dial--right-outer">
             <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="-1">
               <div class="ring-orbit ring-spin-d h-full w-full"></div>
             </div>
@@ -256,55 +250,180 @@ const videoType = (src) => {
       </div>
     </section>
 
-    <!-- Studios (Figma: 3 wide panels, center is taller) -->
-    <section id="studios" class="mx-auto max-w-[1512px] px-6 pb-10 lg:px-0 lg:pb-16" aria-label="Studios">
-      <div class="flex items-end justify-between lg:px-[113px]">
-        <h2 class="font-mono text-[clamp(20px,2.4vw,40px)] leading-[1.1] font-medium tracking-[0.36px] uppercase">
-          world class studios
-        </h2>
-      </div>
+    <!-- Studios (match Figma "home": Studio 1 + Studio 2 blocks) -->
+    <section id="studios" class="mx-auto max-w-[1512px] px-6 pb-24 lg:px-[38px] lg:pb-32" aria-label="Studios">
+      <div class="space-y-24 lg:space-y-[70px]">
+        <!-- Studio 1 -->
+        <article
+          class="studios-card grid gap-10 lg:grid-cols-[501px_1fr] lg:gap-[34px]"
+          data-studio-href={withBase("studio-1/")}
+          tabindex="0"
+          role="link"
+          aria-label="Studio 1"
+        >
+          <div class="parallax-wrap h-[625px] w-full bg-neutral-200" data-parallax data-parallax-speed="1.0">
+            <video
+              class="parallax-media h-full w-full object-cover"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster={withBase("assets/Rectangle 9.png")}
+            >
+              <source src={withBase("assets/IMG_7367.MOV")} type={videoType(withBase("assets/IMG_7367.MOV"))} />
+            </video>
+          </div>
 
-      <div class="mt-6 lg:mt-[52px]">
-        <div class="relative -mx-6 lg:mx-0">
-          <!-- “Step” carousel (center big, sides smaller). No arrows, no hints. -->
-          <div class="pb-6" data-studios-carousel aria-label="Studios carousel" tabindex="0">
-            <div class="flex gap-[24px] lg:gap-[53px]" data-studios-track>
-              {studios.map((studio) => (
-                <article class="relative shrink-0" data-studio-card>
-                  <div data-studio-card-inner>
-                    <div class="w-[calc(100vw-3rem)] sm:w-[560px] lg:w-[1077px]">
-                      <div class="h-[380px] overflow-hidden bg-neutral-200 sm:h-[460px] lg:h-[537px]">
-                        <video
-                          class="h-full w-full object-cover"
-                          autoplay
-                          muted
-                          loop
-                          playsinline
-                          preload="metadata"
-                          poster={studio.poster}
-                        >
-                          <source src={studio.src} type={videoType(studio.src)} />
-                        </video>
-                      </div>
+          <div class="flex h-full flex-col lg:pl-[34px]">
+            <div class="font-mono text-[18px] font-medium tracking-[0.72px] uppercase text-[#CB530E]">STUDIO 1</div>
 
-                      <div class="mt-4 flex items-center justify-between gap-4 sm:mt-[18px]">
-                        <div class="font-pastiche text-[clamp(44px,5vw,88px)] leading-[clamp(40px,4.6vw,80px)] tracking-[-1.76px] text-ink">
-                          {studio.title}
-                        </div>
-                        <PillButton href={studio.href} label="Learn more" class="shrink-0" />
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
+            <h3 class="mt-5 max-w-[504px] font-pastiche text-[50px] leading-[55px] tracking-[-1px] text-ink">
+              Studio number one, or as we call it - Music temple
+            </h3>
+
+            <div class="mt-10">
+              <div class="font-mono text-[20px] font-medium leading-[23.8px] text-ink">Equipment</div>
+              <div class="mt-2 max-w-[322px] font-mono text-[18px] font-light leading-[21.42px] tracking-[0.72px] text-ink">
+                Neve 88RS / UAD DSP / Genelec 8341 / SSL Fusion / DBX 160A / Lynx AD/DA / UAD interfaces
+              </div>
+            </div>
+
+            <div class="mt-auto flex items-end justify-between gap-8 pt-10">
+              <div>
+                <div class="font-mono text-[20px] font-medium leading-[23.8px] text-ink">Capacity</div>
+                <div class="mt-2 font-mono text-[18px] font-light leading-[21.42px] tracking-[0.72px] text-ink">3–5 artists</div>
+              </div>
+
+              <div class="studios-cta-wrap h-[49px] w-[249px] shrink-0">
+                <PillButton
+                  href={withBase("studio-1/")}
+                  label="VIEW IN DETAIL"
+                  class="studios-follow w-[249px] justify-between"
+                  borderColor="#000000"
+                  color="#151414"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </article>
+
+        <div class="studios-sep" aria-hidden="true"></div>
+
+        <!-- Studio 2 -->
+        <article
+          class="studios-card grid gap-10 lg:grid-cols-[501px_1fr] lg:gap-[34px]"
+          data-studio-href={withBase("studio-2/")}
+          tabindex="0"
+          role="link"
+          aria-label="Studio 2"
+        >
+          <div class="parallax-wrap h-[621px] w-full bg-neutral-200" data-parallax data-parallax-speed="1.0">
+            <picture>
+              <source srcset={withBase("assets/IMG_7353.heic")} type="image/heic" />
+              <img
+                src={withBase("assets/IMG_7353.jpg")}
+                alt=""
+                class="parallax-media h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+
+          <div class="flex h-full flex-col lg:pl-[34px]">
+            <div class="font-mono text-[18px] font-medium tracking-[0.72px] uppercase text-[#CB530E]">STUDIO 2</div>
+
+            <h3 class="mt-5 max-w-[504px] font-pastiche text-[50px] leading-[55px] tracking-[-1px] text-ink">
+              Our second best, number one among competition
+            </h3>
+
+            <div class="mt-10">
+              <div class="font-mono text-[20px] font-medium leading-[23.8px] text-ink">Equipment</div>
+              <div class="mt-2 max-w-[322px] font-mono text-[18px] font-light leading-[21.42px] tracking-[0.72px] text-ink">
+                Neve 88RS / UAD DSP / Genelec 8341 / SSL Fusion / DBX 160A / Lynx AD/DA / UAD interfaces
+              </div>
+            </div>
+
+            <div class="mt-auto flex items-end justify-between gap-8 pt-10">
+              <div>
+                <div class="font-mono text-[20px] font-medium leading-[23.8px] text-ink">Capacity</div>
+                <div class="mt-2 font-mono text-[18px] font-light leading-[21.42px] tracking-[0.72px] text-ink">3–5 artists</div>
+              </div>
+
+              <div class="studios-cta-wrap h-[49px] w-[249px] shrink-0">
+                <PillButton
+                  href={withBase("studio-2/")}
+                  label="VIEW IN DETAIL"
+                  class="studios-follow w-[249px] justify-between"
+                  borderColor="#000000"
+                  color="#151414"
+                />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="studios-sep" aria-hidden="true"></div>
+
+        <!-- Studio 3 (copy of Studio 2) -->
+        <article
+          class="studios-card grid gap-10 lg:grid-cols-[501px_1fr] lg:gap-[34px]"
+          data-studio-href={withBase("studio-2/")}
+          tabindex="0"
+          role="link"
+          aria-label="Studio 3"
+        >
+          <div class="parallax-wrap h-[621px] w-full bg-neutral-200" data-parallax data-parallax-speed="1.0">
+            <picture>
+              <source srcset={withBase("assets/IMG_7353.heic")} type="image/heic" />
+              <img
+                src={withBase("assets/IMG_7353.jpg")}
+                alt=""
+                class="parallax-media h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+
+          <div class="flex h-full flex-col lg:pl-[34px]">
+            <div class="font-mono text-[18px] font-medium tracking-[0.72px] uppercase text-[#CB530E]">STUDIO 3</div>
+
+            <h3 class="mt-5 max-w-[504px] font-pastiche text-[50px] leading-[55px] tracking-[-1px] text-ink">
+              Our second best, number one among competition
+            </h3>
+
+            <div class="mt-10">
+              <div class="font-mono text-[20px] font-medium leading-[23.8px] text-ink">Equipment</div>
+              <div class="mt-2 max-w-[322px] font-mono text-[18px] font-light leading-[21.42px] tracking-[0.72px] text-ink">
+                Neve 88RS / UAD DSP / Genelec 8341 / SSL Fusion / DBX 160A / Lynx AD/DA / UAD interfaces
+              </div>
+            </div>
+
+            <div class="mt-auto flex items-end justify-between gap-8 pt-10">
+              <div>
+                <div class="font-mono text-[20px] font-medium leading-[23.8px] text-ink">Capacity</div>
+                <div class="mt-2 font-mono text-[18px] font-light leading-[21.42px] tracking-[0.72px] text-ink">3–5 artists</div>
+              </div>
+
+              <div class="studios-cta-wrap h-[49px] w-[249px] shrink-0">
+                <PillButton
+                  href={withBase("studio-2/")}
+                  label="VIEW IN DETAIL"
+                  class="studios-follow w-[249px] justify-between"
+                  borderColor="#000000"
+                  color="#151414"
+                />
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
     <!-- Studio ribbons (Figma y≈4016; two stripes moving opposite directions) -->
-    <section aria-label="Studios ribbon" class="mx-auto max-w-[1512px] px-0 pb-12 lg:pb-16">
+    <section aria-label="Studios ribbon" class="w-full px-0 pb-12 lg:pb-16">
       <div class="bg-ink py-[1px] text-white">
         <div class="overflow-hidden">
           <div class="ribbon-track ribbon-left">
@@ -355,54 +474,74 @@ const videoType = (src) => {
 
         <div class="mt-10 grid gap-6 lg:mt-[97px] lg:grid-cols-[440px_771px] lg:gap-[74px]" data-together-grid>
           <div class="grid gap-6 lg:gap-[46px]">
-            <div class="together-card group" data-follow-word="Mix">
-              <img
-                src={withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg")}
-                alt=""
-                class="together-img h-[671px] w-[440px] object-cover"
-                loading="lazy"
-                decoding="async"
-                data-zoom-item
-              />
-              <span class="together-follow" aria-hidden="true">Mix</span>
+            <div class="together-item" data-together-item>
+              <div class="together-card group" data-follow-svg="mix-title.svg">
+                <img
+                  src={withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg")}
+                  alt=""
+                  class="together-img h-[671px] w-[440px] object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  data-zoom-item
+                />
+                <span class="together-follow-svg" set:html={mixTitleSvg} aria-hidden="true"></span>
+              </div>
+              <p class="together-caption mt-6 w-[440px] font-mono text-[20px] font-light leading-[23.8px] text-ink">
+                Precision and patience at the console, where tiny moves create massive impact.
+              </p>
             </div>
 
-            <div class="together-card group" data-follow-word="Lounge">
-              <img
-                src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
-                alt=""
-                class="together-img h-[586px] w-[440px] object-cover"
-                loading="lazy"
-                decoding="async"
-                data-zoom-item
-              />
-              <span class="together-follow" aria-hidden="true">Lounge</span>
+            <div class="together-item" data-together-item>
+              <div class="together-card group" data-follow-svg="Lounge-title.svg">
+                <img
+                  src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
+                  alt=""
+                  class="together-img h-[586px] w-[440px] object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  data-zoom-item
+                />
+                <span class="together-follow-svg" set:html={loungeTitleSvg} aria-hidden="true"></span>
+              </div>
+              <p class="together-caption mt-6 w-[440px] font-mono text-[20px] font-light leading-[23.8px] text-ink">
+                A comfortable space to relax, discuss sessions, or reset between takes.
+              </p>
             </div>
           </div>
 
           <div class="grid gap-6 lg:gap-[63px]">
-            <div class="together-card group" data-follow-word="Perform">
-              <img
-                src={withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg")}
-                alt=""
-                class="together-img h-[543px] w-[771px] object-cover"
-                loading="lazy"
-                decoding="async"
-                data-zoom-item
-              />
-              <span class="together-follow" aria-hidden="true">Perform</span>
+            <div class="together-item" data-together-item>
+              <div class="together-card group" data-follow-svg="perform-title.svg">
+                <img
+                  src={withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg")}
+                  alt=""
+                  class="together-img h-[543px] w-[771px] object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  data-zoom-item
+                />
+                <span class="together-follow-svg" set:html={performTitleSvg} aria-hidden="true"></span>
+              </div>
+              <p class="together-caption mt-6 w-[772px] font-mono text-[20px] font-light leading-[23.8px] text-ink">
+                Spaces full of instruments and gear for writing, jamming, and exploring new ideas.
+              </p>
             </div>
 
-            <div class="together-card group" data-follow-word="Share">
-              <img
-                src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
-                alt=""
-                class="together-img h-[696px] w-[772px] object-cover"
-                loading="lazy"
-                decoding="async"
-                data-zoom-item
-              />
-              <span class="together-follow" aria-hidden="true">Share</span>
+            <div class="together-item" data-together-item>
+              <div class="together-card group" data-follow-svg="share-title.svg">
+                <img
+                  src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
+                  alt=""
+                  class="together-img h-[696px] w-[772px] object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  data-zoom-item
+                />
+                <span class="together-follow-svg" set:html={shareTitleSvg} aria-hidden="true"></span>
+              </div>
+              <p class="together-caption mt-6 w-[772px] font-mono text-[20px] font-light leading-[23.8px] text-ink">
+                A listening atelier for early playbacks, critique, and creative conversation
+              </p>
             </div>
           </div>
         </div>
@@ -416,7 +555,7 @@ const videoType = (src) => {
   <div id="machines" aria-hidden="true"></div>
   <div id="film" aria-hidden="true"></div>
 
-  <script>
+  <script define:vars={{ BASE_URL }}>
     const toggleBtn = document.querySelector("[data-video-toggle]");
     const videos = Array.from(document.querySelectorAll("video[data-video]"));
 
@@ -907,16 +1046,16 @@ const videoType = (src) => {
       });
     }
 
-    // “We make it together”: hover darken + cursor-follow 3D word (desktop only)
+    // “We make it together”: hover darken + cursor-follow SVG title (desktop only)
     const prefersHoverTogether = window.matchMedia?.("(hover: hover)")?.matches ?? false;
     const prefersFineTogether = window.matchMedia?.("(pointer: fine)")?.matches ?? false;
 
     if (prefersHoverTogether && prefersFineTogether) {
-      const cards = Array.from(document.querySelectorAll("[data-follow-word]"));
+      const cards = Array.from(document.querySelectorAll("[data-follow-svg]"));
 
       for (const card of cards) {
-        const labelEl = card.querySelector(".together-follow");
-        if (!(labelEl instanceof HTMLElement)) continue;
+        const label = card.querySelector(".together-follow-svg");
+        if (!(label instanceof HTMLElement)) continue;
 
         let raf = 0;
         let x = 0;
@@ -924,8 +1063,8 @@ const videoType = (src) => {
 
         const update = () => {
           raf = 0;
-          labelEl.style.setProperty("--x", `${x}px`);
-          labelEl.style.setProperty("--y", `${y}px`);
+          label.style.setProperty("--x", `${x}px`);
+          label.style.setProperty("--y", `${y}px`);
         };
 
         card.addEventListener("pointerenter", () => {
@@ -946,6 +1085,134 @@ const videoType = (src) => {
           },
           { passive: true }
         );
+      }
+    }
+
+    // “We make it together”: captions appear with images
+    if (!prefersReducedMotion) {
+      const items = Array.from(document.querySelectorAll("[data-together-item]"));
+      if (items.length) {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.setAttribute("data-inview", "true");
+                obs.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.2 }
+        );
+        for (const el of items) obs.observe(el);
+      }
+    } else {
+      document.querySelectorAll("[data-together-item]").forEach((el) => el.setAttribute("data-inview", "true"));
+    }
+
+    // Studios: subtle scroll parallax on images
+    if (!prefersReducedMotion) {
+      const items = Array.from(document.querySelectorAll("[data-parallax]"));
+      let raf = 0;
+
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+      function updateParallax() {
+        raf = 0;
+        const vh = window.innerHeight || 1;
+        for (const wrap of items) {
+          if (!(wrap instanceof HTMLElement)) continue;
+          const media = wrap.querySelector(".parallax-media");
+          if (!(media instanceof HTMLElement)) continue;
+          const speed = Number(wrap.getAttribute("data-parallax-speed") || "0.12") || 0.12;
+
+          const r = wrap.getBoundingClientRect();
+          // progress: -1 (above) .. 1 (below)
+          const p = (r.top + r.height / 2 - vh / 2) / (vh / 2);
+          // Smooth 0..1 progress through viewport, then center to -1..1
+          const progress = (vh - r.top) / (vh + r.height);
+          const centered = (progress - 0.5) * 2;
+          // Strong parallax, slightly dialed back
+          const y = clamp(centered * 170 * speed, -130, 130);
+          media.style.setProperty("--py", `${y.toFixed(2)}px`);
+        }
+      }
+
+      function requestUpdate() {
+        if (raf) return;
+        raf = requestAnimationFrame(updateParallax);
+      }
+
+      updateParallax();
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate, { passive: true });
+    }
+
+    // Studios: whole card navigates + cursor-follow CTA (desktop only for following)
+    {
+      const cards = Array.from(document.querySelectorAll("[data-studio-href]"));
+      for (const card of cards) {
+        if (!(card instanceof HTMLElement)) continue;
+        const href = card.getAttribute("data-studio-href");
+        if (!href) continue;
+
+        card.addEventListener("click", (e) => {
+          if (e.defaultPrevented) return;
+          const t = e.target;
+          if (t instanceof Element && t.closest("a,button")) return;
+          window.location.href = href;
+        });
+
+        card.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          window.location.href = href;
+        });
+      }
+
+      const prefersHoverStudios = window.matchMedia?.("(hover: hover)")?.matches ?? false;
+      const prefersFineStudios = window.matchMedia?.("(pointer: fine)")?.matches ?? false;
+
+      if (prefersHoverStudios && prefersFineStudios) {
+        const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+        for (const card of cards) {
+          if (!(card instanceof HTMLElement)) continue;
+          const btn = card.querySelector(".studios-follow");
+          if (!(btn instanceof HTMLElement)) continue;
+
+          let raf = 0;
+          let x = 0;
+          let y = 0;
+
+          const update = () => {
+            raf = 0;
+            card.style.setProperty("--sx", `${x}px`);
+            card.style.setProperty("--sy", `${y}px`);
+          };
+
+          const setFromEvent = (e) => {
+            const r = card.getBoundingClientRect();
+            // clamp so the pill never fully exits the card
+            const pad = 28;
+            x = clamp(e.clientX - r.left, pad, r.width - pad);
+            y = clamp(e.clientY - r.top, pad, r.height - pad);
+            if (!raf) raf = requestAnimationFrame(update);
+          };
+
+          card.addEventListener("pointerenter", (e) => {
+            card.setAttribute("data-following", "true");
+            setFromEvent(e);
+          });
+          card.addEventListener("pointerleave", () => card.removeAttribute("data-following"));
+
+          card.addEventListener(
+            "pointermove",
+            (e) => {
+              setFromEvent(e);
+            },
+            { passive: true }
+          );
+        }
       }
     }
   </script>

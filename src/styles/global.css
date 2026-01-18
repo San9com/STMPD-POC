@@ -31,6 +31,8 @@ body {
 .marker-hover--invert {
   --marker-bg: #ffffff;
   --marker-fg: var(--ink);
+  /* Header hover should be a simple rectangle (no pill). */
+  border-radius: 0;
 }
 
 @keyframes marker-wipe {
@@ -101,6 +103,17 @@ body {
   transform: translateY(-50%) rotate(-1deg);
 }
 
+/* Invert variant (used on white-on-image header links): plain white rectangle highlight */
+.marker-hover--invert::before {
+  background: #ffffff;
+  border-radius: 0;
+  transform: translateY(-50%) scaleX(0.02);
+}
+
+.marker-hover--invert::after {
+  display: none;
+}
+
 .marker-hover:hover,
 .marker-hover:focus-visible {
   color: var(--marker-fg) !important;
@@ -109,6 +122,14 @@ body {
 .marker-hover:hover::before,
 .marker-hover:focus-visible::before {
   animation: marker-wipe 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.marker-hover--invert:hover::before,
+.marker-hover--invert:focus-visible::before {
+  /* No wipe animation; just a clean rectangle */
+  animation: none;
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
 }
 
 .marker-hover:hover::after,
@@ -139,6 +160,14 @@ body {
   border-color: var(--ink) !important;
 }
 
+/* Studios: keep VIEW IN DETAIL pill dark (no inversion) */
+#studios .pill-button.studios-follow:hover,
+#studios .pill-button.studios-follow:focus-visible {
+  background: transparent !important;
+  color: var(--ink2) !important;
+  border-color: #000000 !important;
+}
+
 /* “We make it together” hover cards */
 .together-card {
   position: relative;
@@ -157,65 +186,138 @@ body {
   filter: brightness(0.5);
 }
 
-.together-follow {
+.together-follow-svg {
   position: absolute;
-  left: 0;
-  top: 0;
-  transform: translate3d(var(--x, -9999px), var(--y, -9999px), 0) translate3d(-50%, -50%, 0);
+  left: var(--x, -9999px);
+  top: var(--y, -9999px);
+  transform: translate(-50%, -50%);
   pointer-events: none;
+  z-index: 5;
   opacity: 0;
   transition: opacity 120ms ease;
-  will-change: transform;
-
-  /* simple “3D word” treatment */
-  font-family: "Pastiche Grotesque Trial", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  line-height: 1;
-  font-size: clamp(96px, 10vw, 220px);
-  color: #e7e8f3;
-  text-shadow: -0.09em 0.07em 0 rgba(44, 45, 51, 0.92);
+  will-change: transform, left, top;
   user-select: none;
 }
 
-.together-card[data-following="true"] .together-follow {
+.together-follow-svg > svg {
+  display: block;
+  width: clamp(460px, 40vw, 980px);
+  height: auto;
+}
+
+.together-card[data-following="true"] .together-follow-svg {
   opacity: 1;
+}
+
+.parallax-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-wrap > picture {
+  display: block;
+  height: 100%;
+}
+
+.parallax-media {
+  will-change: transform;
+  transform: translate3d(0, var(--py, 0px), 0) scale(1.4);
+  transform-origin: center;
+  transition: transform 110ms ease-out;
+}
+
+.studios-sep {
+  height: 1px;
+  background: rgba(21, 21, 21, 0.14);
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.studios-card {
+  position: relative;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .studios-card {
+    cursor: pointer;
+  }
+
+  .studios-follow {
+    position: absolute;
+    left: var(--sx, -9999px);
+    top: var(--sy, -9999px);
+    transform: translate(-50%, -50%) translate3d(18px, 18px, 0);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease;
+    z-index: 10;
+  }
+
+  .studios-card[data-following="true"] .studios-follow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Keep keyboard focus sane (don't leave the button off-screen). */
+  .studios-follow:focus-visible {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.together-caption {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition: opacity 220ms ease, transform 220ms ease;
+  will-change: opacity, transform;
+}
+
+[data-together-item][data-inview] .together-caption {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .together-img,
-  .together-follow {
+  .together-follow-svg {
     transition: none;
   }
+
+  .together-caption {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* Rings: keep off-canvas circles within viewport on wide screens */
-.rings-left-safe {
-  left: -254px;
+/* Ready / Set / Record: proper dial layout */
+.ring-dial {
+  /* smaller + responsive */
+  --ring-size: clamp(260px, 26vw, 340px);
+  --ring-top: 58px;
+  position: absolute;
+  top: var(--ring-top);
+  width: var(--ring-size);
+  height: var(--ring-size);
 }
-.rings-right-safe {
-  left: 1334px;
+
+.ring-dial--left-outer {
+  left: 0;
+}
+.ring-dial--right-outer {
+  right: 0;
 }
 
-@media (min-width: 1024px) {
-  /*
-    Clamp the off-canvas rings to stay inside the viewport.
-    Works for both <1512px (frame fills viewport) and >1512px (centered frame).
-  */
-  :root {
-    --frame-w: min(1512px, 100vw);
-    --frame-left: calc((100vw - var(--frame-w)) / 2);
-  }
-
-  .rings-left-safe {
-    left: max(-254px, calc(-1 * var(--frame-left)));
-  }
-
-  /* 458px is the ring width for the rightmost circle */
-  .rings-right-safe {
-    left: min(1334px, calc(100vw - var(--frame-left) - 458px));
-  }
+/* mask the copy area (so lines don't cut through text) */
+.rings-copy-shield {
+  display: inline-block;
+  background: #fff;
+  padding: 18px 26px;
 }
 
 html {
@@ -484,6 +586,7 @@ body {
 }
 
 .ring-orbit {
+  /* Use BASE_URL-aware variable set in BaseLayout */
   background: var(--dial-bg) center / contain no-repeat;
   position: relative;
   transform-origin: center;
