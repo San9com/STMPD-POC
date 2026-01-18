@@ -1,118 +1,74 @@
-# STMPD-POC (Astro)
+# STMPD-POC
 
-This is a small POC website for **STMPD studios redesign**. It is built with [Astro](https://astro.build/) and deployed to GitHub Pages.
+This repository is a static website POC for a STMPD studios redesign.
+It uses Astro and deploys to GitHub Pages as a project site.
 
 Live site: `https://san9com.github.io/STMPD-POC/`
 
-## Tech stack (STMPD POC) — Alexander Murashko style
+## Stack
 
-### 1. Core framework at use
+Astro v5 is used as the main framework (static output).
+Tailwind CSS is used for styling via `@astrojs/tailwind`.
+TypeScript is included for editor support and safer refactors.
 
-The core framework at use is **Astro (v5)**. This project is mainly a static site, so Astro is a good fit.
+A. Entry pages live in `src/pages/` (file-based routing).
+B. Shared UI components live in `src/components/`.
+C. Layout + global head/scripts live in `src/layouts/BaseLayout.astro`.
 
-A. I’m using **Astro pages** in `src/pages/` (each `.astro` file becomes a route)
-B. Static build output is generated into `dist/` (then deployed)
-C. Base path support for GitHub Pages project sites via `site` + `base` in `astro.config.mjs`
+## Local setup
 
-### 2. Styling (CSS)
+You need Node.js 20 (or close) and npm.
 
-Styling is done with **Tailwind CSS (v3)** through the `@astrojs/tailwind` integration.
-
-Tailwind utility classes are used for layout, spacing, and typography.
-PostCSS pipeline (with Autoprefixer) helps with browser support.
-Global styles live in `src/styles/global.css` (Tailwind + a bit of custom CSS).
-
-### 3. Language and tooling
-
-TypeScript (v5) is included for better type safety and IDE support.
-Node + npm scripts are kept simple.
-`npm run dev` runs local dev server.
-`npm run build` creates production build.
-`npm run preview` previews `dist/` locally.
-
-### 4. Deployment
-
-This site is deployed as a **GitHub Pages project site**:
-
-Build happens in GitHub Actions (`.github/workflows/deploy-pages.yml`).
-The action publishes the `dist/` folder.
-Because it’s a project site under `/STMPD-POC/`, the site uses a base path (important for links and assets).
-
-### 5. Assets and fonts
-
-Static assets are stored in `public/` and copied as-is into the build.
-`public/assets/` contains images, svg, videos used by the site.
-`public/fonts/` contains local font file(s).
-
-### 6. General decisions rationale (short)
-
-Why Astro? Very good performance for static sites (less client-side JS by default). Simple routing via files in `src/pages/`. Easy to deploy (build once, serve static files).
-
-Why Tailwind? Fast development for a POC. Consistent UI without writing too much custom CSS. Works nicely with Astro components.
-
-Why GitHub Pages? Free hosting for a school/portfolio demo. Easy automatic deploy on push to `main`.
-
-## Project structure
-
-`src/pages/` contains routes (pages). Example: `index.astro` is home page, and `studio-1.astro` / `studio-2.astro` are studio detail pages.
-`src/components/` contains reusable UI parts (menu, footer, buttons, icons, etc).
-`src/layouts/` contains shared page layout (`BaseLayout.astro`).
-`src/styles/` contains global CSS (Tailwind + custom styles).
-`public/` contains static files copied as-is to build output, like assets and fonts.
-`.github/workflows/deploy-pages.yml` is GitHub Actions workflow that builds and deploy to GitHub Pages.
-`astro.config.mjs` is Astro config (important for GitHub Pages base path).
-
-## Setup
-
-### Requirements
-
-Node.js 20 (or close version).
-npm.
-
-### Install
+Install dependencies:
 
 ```bash
 npm ci
 ```
 
-### Run locally
+Start dev server:
 
 ```bash
 npm run dev
 ```
 
-Then open the local URL Astro prints in terminal (usually `http://localhost:4321`).
-
-### Build
+Build production output:
 
 ```bash
 npm run build
 ```
 
-### Preview build
+Preview production build:
 
 ```bash
 npm run preview
 ```
 
-## Deploy (GitHub Pages)
+## Project structure (main folders)
 
-This repo is configured for GitHub Pages **project site** under `/STMPD-POC/`.
-Because of that, we use `site` + `base` in `astro.config.mjs` and `import.meta.env.BASE_URL` in code.
+`src/pages/` contains routes. Example: `index.astro` is the home page, and `studio-1.astro` / `studio-2.astro` are studio pages.
+`src/components/` contains reusable parts like menu overlay, footer, icons, and buttons.
+`src/styles/global.css` contains Tailwind directives and custom CSS for interactions/animations.
+`public/` contains static files copied to `dist/` without processing.
+`public/assets/` contains images, svg, and videos.
+`public/fonts/` contains local font files used by `@font-face`.
 
-When you push to `main`, GitHub Actions should run `Deploy to GitHub Pages` and publish the `dist/` folder.
+## Deployment (GitHub Pages)
 
-## Why I chose Astro
+This project is hosted as a GitHub Pages project site, so it needs a base path `/STMPD-POC/`.
+The base path is configured in `astro.config.mjs` using `site` and `base`.
+In the UI code, URLs for assets and internal links should use `import.meta.env.BASE_URL` (or helper around it), otherwise you can break images/links on Pages.
 
-I picked Astro because:
+Deployment is done by GitHub Actions in `.github/workflows/deploy-pages.yml`.
+It builds the site and publishes the `dist/` folder.
 
-It is very good for static sites and performance.
-You can write pages as components (`.astro`) without heavy client JS.
-It works nice with Tailwind and simple folder structure.
-Deploying to GitHub Pages is straight forward (just build and upload `dist`).
+## Why Astro (short technical)
 
-## Notes
+Astro fits this POC because it generates static HTML by default, so the runtime is light and fast.
+It supports component based templates (`.astro`) and integrates cleanly with Tailwind.
+For GitHub Pages, the deploy is also simple: build once, upload `dist`.
 
-Some assets are big (videos), so first load can be slow on bad internet.
-If you change the repo name, you will need to update the base path in config, otherwise links/images may break.
+## Debug notes
+
+If assets are missing on GitHub Pages, check that the URL starts with `/STMPD-POC/` and not with `/assets/`.
+If you rename the repository, update the base path in `astro.config.mjs` and re-deploy.
 

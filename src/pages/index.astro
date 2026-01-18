@@ -214,7 +214,7 @@ const videoType = (src) => {
         <!-- Circles are positioned to match Figma offsets (some overflow left/right) -->
         <div class="pointer-events-none absolute inset-0 overflow-visible rings-safe-mask">
           <!-- left circle (off-canvas) -->
-          <div class="absolute left-[-254px] top-[27px] h-[411px] w-[411px]">
+          <div class="absolute rings-left-safe top-[27px] h-[411px] w-[411px]">
             <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="1">
               <div class="ring-orbit ring-spin-a h-full w-full"></div>
             </div>
@@ -232,7 +232,7 @@ const videoType = (src) => {
             </div>
           </div>
           <!-- right circle (overflows) -->
-          <div class="absolute left-[1334px] top-[4px] h-[458px] w-[458px]">
+          <div class="absolute rings-right-safe top-[4px] h-[458px] w-[458px]">
             <div class="ring-scroll h-full w-full" data-ring-scroll data-ring-dir="-1">
               <div class="ring-orbit ring-spin-d h-full w-full"></div>
             </div>
@@ -353,43 +353,57 @@ const videoType = (src) => {
           </p>
         </div>
 
-        <div class="mt-10 grid gap-6 lg:mt-[97px] lg:grid-cols-[440px_771px] lg:gap-[74px]">
+        <div class="mt-10 grid gap-6 lg:mt-[97px] lg:grid-cols-[440px_771px] lg:gap-[74px]" data-together-grid>
           <div class="grid gap-6 lg:gap-[46px]">
-            <img
-              src={withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg")}
-              alt=""
-              class="h-[671px] w-[440px] object-cover"
-              loading="lazy"
-              decoding="async"
-              data-zoom-item
-            />
-            <img
-              src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
-              alt=""
-              class="h-[586px] w-[440px] object-cover"
-              loading="lazy"
-              decoding="async"
-              data-zoom-item
-            />
+            <div class="together-card group" data-follow-word="Mix">
+              <img
+                src={withBase("assets/274082823_1471205146649880_25528948957257731_n.jpg")}
+                alt=""
+                class="together-img h-[671px] w-[440px] object-cover"
+                loading="lazy"
+                decoding="async"
+                data-zoom-item
+              />
+              <span class="together-follow" aria-hidden="true">Mix</span>
+            </div>
+
+            <div class="together-card group" data-follow-word="Lounge">
+              <img
+                src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
+                alt=""
+                class="together-img h-[586px] w-[440px] object-cover"
+                loading="lazy"
+                decoding="async"
+                data-zoom-item
+              />
+              <span class="together-follow" aria-hidden="true">Lounge</span>
+            </div>
           </div>
 
           <div class="grid gap-6 lg:gap-[63px]">
-            <img
-              src={withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg")}
-              alt=""
-              class="h-[543px] w-[771px] object-cover"
-              loading="lazy"
-              decoding="async"
-              data-zoom-item
-            />
-            <img
-              src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
-              alt=""
-              class="h-[696px] w-[772px] object-cover"
-              loading="lazy"
-              decoding="async"
-              data-zoom-item
-            />
+            <div class="together-card group" data-follow-word="Perform">
+              <img
+                src={withBase("assets/489833225_18358745860181286_4041526710478678309_n.jpg")}
+                alt=""
+                class="together-img h-[543px] w-[771px] object-cover"
+                loading="lazy"
+                decoding="async"
+                data-zoom-item
+              />
+              <span class="together-follow" aria-hidden="true">Perform</span>
+            </div>
+
+            <div class="together-card group" data-follow-word="Share">
+              <img
+                src={withBase("assets/468588580_18342529579181286_562739424918443234_n.jpg")}
+                alt=""
+                class="together-img h-[696px] w-[772px] object-cover"
+                loading="lazy"
+                decoding="async"
+                data-zoom-item
+              />
+              <span class="together-follow" aria-hidden="true">Share</span>
+            </div>
           </div>
         </div>
       </div>
@@ -891,6 +905,48 @@ const videoType = (src) => {
         el.style.transform = "none";
         el.style.opacity = "1";
       });
+    }
+
+    // “We make it together”: hover darken + cursor-follow 3D word (desktop only)
+    const prefersHoverTogether = window.matchMedia?.("(hover: hover)")?.matches ?? false;
+    const prefersFineTogether = window.matchMedia?.("(pointer: fine)")?.matches ?? false;
+
+    if (prefersHoverTogether && prefersFineTogether) {
+      const cards = Array.from(document.querySelectorAll("[data-follow-word]"));
+
+      for (const card of cards) {
+        const labelEl = card.querySelector(".together-follow");
+        if (!(labelEl instanceof HTMLElement)) continue;
+
+        let raf = 0;
+        let x = 0;
+        let y = 0;
+
+        const update = () => {
+          raf = 0;
+          labelEl.style.setProperty("--x", `${x}px`);
+          labelEl.style.setProperty("--y", `${y}px`);
+        };
+
+        card.addEventListener("pointerenter", () => {
+          card.setAttribute("data-following", "true");
+        });
+
+        card.addEventListener("pointerleave", () => {
+          card.removeAttribute("data-following");
+        });
+
+        card.addEventListener(
+          "pointermove",
+          (e) => {
+            const r = card.getBoundingClientRect();
+            x = e.clientX - r.left;
+            y = e.clientY - r.top;
+            if (!raf) raf = requestAnimationFrame(update);
+          },
+          { passive: true }
+        );
+      }
     }
   </script>
 </BaseLayout>

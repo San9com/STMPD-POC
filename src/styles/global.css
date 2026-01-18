@@ -139,6 +139,85 @@ body {
   border-color: var(--ink) !important;
 }
 
+/* “We make it together” hover cards */
+.together-card {
+  position: relative;
+  /* allow the hover word to spill beyond the image */
+  overflow: visible;
+}
+
+.together-img {
+  display: block;
+  transition: filter 180ms ease;
+  will-change: filter;
+}
+
+.together-card:hover .together-img,
+.together-card[data-following="true"] .together-img {
+  filter: brightness(0.5);
+}
+
+.together-follow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate3d(var(--x, -9999px), var(--y, -9999px), 0) translate3d(-50%, -50%, 0);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  will-change: transform;
+
+  /* simple “3D word” treatment */
+  font-family: "Pastiche Grotesque Trial", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  line-height: 1;
+  font-size: clamp(96px, 10vw, 220px);
+  color: #e7e8f3;
+  text-shadow: -0.09em 0.07em 0 rgba(44, 45, 51, 0.92);
+  user-select: none;
+}
+
+.together-card[data-following="true"] .together-follow {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .together-img,
+  .together-follow {
+    transition: none;
+  }
+}
+
+/* Rings: keep off-canvas circles within viewport on wide screens */
+.rings-left-safe {
+  left: -254px;
+}
+.rings-right-safe {
+  left: 1334px;
+}
+
+@media (min-width: 1024px) {
+  /*
+    Clamp the off-canvas rings to stay inside the viewport.
+    Works for both <1512px (frame fills viewport) and >1512px (centered frame).
+  */
+  :root {
+    --frame-w: min(1512px, 100vw);
+    --frame-left: calc((100vw - var(--frame-w)) / 2);
+  }
+
+  .rings-left-safe {
+    left: max(-254px, calc(-1 * var(--frame-left)));
+  }
+
+  /* 458px is the ring width for the rightmost circle */
+  .rings-right-safe {
+    left: min(1334px, calc(100vw - var(--frame-left) - 458px));
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -303,8 +382,12 @@ body {
 }
 @media (min-width: 1024px) {
   [data-studios-carousel] {
-    padding-left: 113px;
-    padding-right: 113px;
+    /*
+      Prevent the 1077px desktop card from being clipped on ~1024–1500px widths.
+      This clamps padding so card + padding never exceeds viewport.
+    */
+    padding-left: clamp(24px, calc((100vw - 1077px) / 2), 113px);
+    padding-right: clamp(24px, calc((100vw - 1077px) / 2), 113px);
   }
 }
 
