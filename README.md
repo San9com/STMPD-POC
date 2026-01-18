@@ -4,6 +4,60 @@ This is a small POC website for **STMPD studios redesign**. It is built with [As
 
 Live site: `https://san9com.github.io/STMPD-POC/`
 
+## Tech stack (STMPD POC) — Alexander Murashko style
+
+### 1. Core framework at use
+
+The core framework at use is **Astro (v5)**. This project is mainly a static site, so Astro is a good fit.
+
+- I’m using **Astro pages** in `src/pages/` (each `.astro` file becomes a route)
+- **Static build output** is generated into `dist/` (then deployed)
+- **Base path support** for GitHub Pages project sites via `site` + `base` in `astro.config.mjs`
+
+### 2. Styling (CSS)
+
+Styling is done with **Tailwind CSS (v3)** through the `@astrojs/tailwind` integration.
+
+- **Tailwind utility classes** for fast layout and consistent spacing/typography
+- **PostCSS** pipeline (with **Autoprefixer**) for browser compatibility
+- Global styles live in `src/styles/global.css` (Tailwind + a bit of custom CSS)
+
+### 3. Language and tooling
+
+- **TypeScript (v5)** is included for better type safety and IDE support
+- Node + npm scripts are kept simple:
+  - `npm run dev` (local dev server)
+  - `npm run build` (production build)
+  - `npm run preview` (preview `dist/` locally)
+
+### 4. Deployment
+
+This site is deployed as a **GitHub Pages project site**:
+
+- Build happens in GitHub Actions (`.github/workflows/deploy-pages.yml`)
+- The action publishes the `dist/` folder
+- Because it’s a project site under `/STMPD-POC/`, the site uses a base path (important for links and assets)
+
+### 5. Assets and fonts
+
+- Static assets are stored in `public/` and copied as-is into the build
+  - `public/assets/`: images, svg, videos used by the site
+  - `public/fonts/`: local font file(s)
+
+### 6. General decisions rationale (short)
+
+- **Why Astro?**
+  - Very good performance for static sites (less client-side JS by default)
+  - Simple routing via files in `src/pages/`
+  - Easy to deploy (build once, serve static files)
+- **Why Tailwind?**
+  - Fast development for a POC
+  - Consistent UI without writing too much custom CSS
+  - Works nicely with Astro components
+- **Why GitHub Pages?**
+  - Free hosting for a school/portfolio demo
+  - Easy automatic deploy on push to `main`
+
 ## Project structure
 
 - `src/pages/`: routes (pages)
